@@ -1,9 +1,12 @@
 [submodule "Volum/vendor/spdlog"]
 	path = Volum/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+	branch = v1.x
 [submodule "Volum/vendor/GLFW"]
 	path = Volum/vendor/GLFW
 	url = https://github.com/TheCherno/GLFW
+	branch = master
 [submodule "Volum/vendor/ImGui"]
 	path = Volum/vendor/ImGui
 	url = https://github.com/DiegoK98/imgui
+	branch = docking
