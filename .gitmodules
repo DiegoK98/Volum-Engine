@@ -6,4 +6,4 @@
 	url = https://github.com/TheCherno/GLFW
 [submodule "Volum/vendor/ImGui"]
 	path = Volum/vendor/ImGui
-	url = https://github.com/TheCherno/imgui
+	url = https://github.com/DiegoK98/imgui
