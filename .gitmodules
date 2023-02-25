@@ -4,8 +4,8 @@
 	branch = v1.x
 [submodule "Volum/vendor/GLFW"]
 	path = Volum/vendor/GLFW
-	url = https://github.com/TheCherno/GLFW
-	branch = master
+	url = https://github.com/DiegoK98/GLFW
+	branch = workingVersion
 [submodule "Volum/vendor/ImGui"]
 	path = Volum/vendor/ImGui
 	url = https://github.com/DiegoK98/imgui
