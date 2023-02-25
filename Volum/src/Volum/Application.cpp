@@ -20,8 +20,59 @@ namespace Volum
 
 		m_imGuiLayer = new ImGuiLayer();
 		PushOverlay(m_imGuiLayer);
+
+		glGenVertexArrays(1, &m_vertexArray);
+		glBindVertexArray(m_vertexArray);
+
+		float vertices[3 * 3] = {
+			-0.5f, -0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.0f,  0.5f, 0.0f,
+		};
+
+		m_vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+
+		unsigned int indices[3] = {
+			0, 1, 2
+		};
+
+		m_indexBuffer.reset(IndexBuffer::Create(indices, 3));
+
+		std::string vertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_position;
+			
+			out vec3 v_position;
+			
+			void main()
+			{
+				v_position = a_position * 0.5 + 0.5;
+				gl_Position = vec4(a_position, 1.0);
+			}
+		)";
+		
+		std::string fragmentSrc = R"(
+			#version 330 core
+			
+			
+			in vec3 v_position;
+			
+			out vec4 color;
+
+			void main()
+			{
+				color = vec4(v_position, 1.0);
+			}
+		)";
+
+		// Equivalent to make_unique
+		m_shader.reset(new Shader(vertexSrc, fragmentSrc));
 	}
-	
+
 	Application::~Application()
 	{
 	}
@@ -30,8 +81,12 @@ namespace Volum
 	{
 		while (m_running)
 		{
-			glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
+			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
+
+			m_shader->Bind();
+			glBindVertexArray(m_vertexArray);
+			glDrawElements(GL_TRIANGLES, m_indexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : m_layerStack)
 				layer->OnUpdate();

@@ -16,6 +16,11 @@ public:
 			VLM_TRACE("K key pressed");
 	}
 
+	void OnImGuiRender() override
+	{
+
+	}
+
 	void OnEvent(Volum::Event& event) override
 	{
 		//VLM_TRACE("{0}", event);
