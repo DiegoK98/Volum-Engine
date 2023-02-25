@@ -10,12 +10,15 @@ public:
 
 	void OnUpdate() override
 	{
-		VLM_INFO("ExampleLayer::Update");
+		//VLM_INFO("ExampleLayer::Update");
+
+		if (Volum::Input::isKeyPressed(VLM_KEY_K))
+			VLM_TRACE("K key pressed");
 	}
 
 	void OnEvent(Volum::Event& event) override
 	{
-		VLM_TRACE("{0}", event);
+		//VLM_TRACE("{0}", event);
 	}
 };
 
@@ -25,7 +28,6 @@ public:
 	Example()
 	{
 		PushLayer(new ExampleLayer());
-		PushOverlay(new Volum::ImGuiLayer());
 	}
 
 	~Example()

@@ -2,7 +2,7 @@
 
 #include "Application.h"
 
-#include "Log.h"
+#include "Input.h"
 
 #include <glad/gl.h>
 
@@ -17,6 +17,9 @@ namespace Volum
 
 		m_window = std::unique_ptr<Window>(Window::Create());
 		m_window->SetEventCallback(VLM_BIND_EVENT_FN(Application::OnEvent));
+
+		m_imGuiLayer = new ImGuiLayer();
+		PushOverlay(m_imGuiLayer);
 	}
 	
 	Application::~Application()
@@ -32,6 +35,13 @@ namespace Volum
 
 			for (Layer* layer : m_layerStack)
 				layer->OnUpdate();
+
+			m_imGuiLayer->Begin();
+
+			for (Layer* layer : m_layerStack)
+				layer->OnImGuiRender();
+
+			m_imGuiLayer->End();
 
 			m_window->OnUpdate();
 		}

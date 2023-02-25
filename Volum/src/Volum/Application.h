@@ -5,6 +5,7 @@
 #include "LayerStack.h"
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
+#include "Volum/ImGui/ImGuiLayer.h"
 
 namespace Volum
 {
@@ -28,6 +29,7 @@ namespace Volum
 		bool OnWindowClose(WindowCloseEvent& e);
 		
 		std::unique_ptr<Window> m_window;
+		ImGuiLayer* m_imGuiLayer;
 		bool m_running = true;
 		LayerStack m_layerStack;
 
