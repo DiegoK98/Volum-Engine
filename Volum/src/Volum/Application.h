@@ -9,7 +9,7 @@
 
 namespace Volum
 {
-	class VOLUM_API Application
+	class Application
 	{
 	public:
 		Application();

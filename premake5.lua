@@ -28,9 +28,10 @@ group ""
 
 project "Volum"
     location "Volum"
-    kind "SharedLib"
+    kind "StaticLib"
     language "C++"
-    staticruntime "Off"
+    cppdialect "C++20"
+    staticruntime "on"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -63,7 +64,6 @@ project "Volum"
     }
 
     filter "system:windows"
-        cppdialect "C++20"
         systemversion "latest"
 
         defines
@@ -73,31 +73,27 @@ project "Volum"
             "GLFW_INCLUDE_NONE"
         }
 
-        postbuildcommands
-        {
-            ("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Example/\"")
-        }
-
     filter "configurations:Debug"
         defines "VLM_DEBUG"
         runtime "Debug"
-        symbols "On"
+        symbols "on"
 
     filter "configurations:Release"
         defines "VLM_RELEASE"
         runtime "Release"
-        optimize "On"
+        optimize "on"
 
     filter "configurations:Dist"
         defines "VLM_DIST"
         runtime "Release"
-        optimize "On"
+        optimize "on"
 
 project "Example"
     location "Example"
     kind "ConsoleApp"
     language "C++"
-    staticruntime "Off"
+    cppdialect "C++20"
+    staticruntime "on"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -122,7 +118,6 @@ project "Example"
     }
 
     filter "system:windows"
-        cppdialect "C++20"
         systemversion "latest"
 
         defines
@@ -133,14 +128,14 @@ project "Example"
     filter "configurations:Debug"
         defines "VLM_DEBUG"
         runtime "Debug"
-        symbols "On"
+        symbols "on"
 
     filter "configurations:Release"
         defines "VLM_RELEASE"
         runtime "Release"
-        optimize "On"
+        optimize "on"
 
     filter "configurations:Dist"
         defines "VLM_DIST"
         runtime "Release"
-        optimize "On"
+        optimize "on"

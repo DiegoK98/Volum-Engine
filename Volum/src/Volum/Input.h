@@ -4,7 +4,7 @@
 
 namespace Volum
 {
-	class VOLUM_API Input
+	class Input
 	{
 	public:
 		inline static bool isKeyPressed(int keycode) { return s_instance->isKeyPressedImpl(keycode); }

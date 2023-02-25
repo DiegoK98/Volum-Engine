@@ -1,12 +1,6 @@
 #pragma once
 
-#ifdef VLM_PLATFORM_WINDOWS
-	#ifdef VLM_BUILD_DLL
-		#define VOLUM_API __declspec(dllexport)
-	#else
-		#define VOLUM_API __declspec(dllimport)
-	#endif
-#else
+#ifndef VLM_PLATFORM_WINDOWS
 	#error Volum only supports Windows!
 #endif
 

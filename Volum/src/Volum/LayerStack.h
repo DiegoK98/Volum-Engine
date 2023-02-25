@@ -7,7 +7,7 @@
 
 namespace Volum {
 
-	class VOLUM_API LayerStack
+	class LayerStack
 	{
 	public:
 		LayerStack();

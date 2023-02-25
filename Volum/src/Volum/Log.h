@@ -6,7 +6,7 @@
 
 namespace Volum
 {
-	class VOLUM_API Log
+	class Log
 	{
 	public:
 		static void Init();
