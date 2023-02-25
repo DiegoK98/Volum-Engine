@@ -9,7 +9,7 @@
 [submodule "Volum/vendor/ImGui"]
 	path = Volum/vendor/ImGui
 	url = https://github.com/DiegoK98/imgui
-	branch = docking
+	branch = workingVersion
 [submodule "Volum/vendor/glm"]
 	path = Volum/vendor/glm
 	url = https://github.com/g-truc/glm
