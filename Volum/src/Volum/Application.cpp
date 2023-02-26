@@ -139,10 +139,6 @@ namespace Volum
 		m_shaderBlue.reset(new Shader(vertexSrcBlue, fragmentSrcBlue));
 	}
 
-	Application::~Application()
-	{
-	}
-
 	void Application::Run()
 	{
 		while (m_running)

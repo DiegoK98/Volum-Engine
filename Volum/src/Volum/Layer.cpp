@@ -8,9 +8,4 @@ namespace Volum {
 	{
 	}
 
-	Layer::~Layer()
-	{
-
-	}
-
 }
