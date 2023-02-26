@@ -3,8 +3,7 @@
 #include "Application.h"
 
 #include "Input.h"
-
-#include <glad/gl.h>
+#include "Renderer/Renderer.h"
 
 namespace Volum
 {
@@ -21,27 +20,95 @@ namespace Volum
 		m_imGuiLayer = new ImGuiLayer();
 		PushOverlay(m_imGuiLayer);
 
-		glGenVertexArrays(1, &m_vertexArray);
-		glBindVertexArray(m_vertexArray);
+		m_vertexArray.reset(VertexArray::Create());
 
-		float vertices[3 * 3] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.0f,  0.5f, 0.0f,
+		float vertices[3 * 7] = {
+			-0.5f, -0.5f, 0.0f,		0.8f, 0.3f, 0.1f, 1.0f,
+			 0.5f, -0.5f, 0.0f,		0.3f, 0.8f, 0.1f, 1.0f,
+			 0.0f,  0.5f, 0.0f,		0.6f, 0.1f, 0.6f, 1.0f,
 		};
 
-		m_vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		std::shared_ptr<VertexBuffer> triangleVB;
+		triangleVB.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		triangleVB->SetLayout({
+			{ ShaderDataType::Float3, "a_position" },
+			{ ShaderDataType::Float4, "a_color" }
+		});
 
-		unsigned int indices[3] = {
+		m_vertexArray->AddVertexBuffer(triangleVB);
+
+		uint32_t indices[3] = {
 			0, 1, 2
 		};
 
-		m_indexBuffer.reset(IndexBuffer::Create(indices, 3));
+		std::shared_ptr<IndexBuffer> triangleIB;
+		triangleIB.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		m_vertexArray->SetIndexBuffer(triangleIB);
 
 		std::string vertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_position;
+			layout(location = 1) in vec4 a_color;
+			
+			out vec3 v_position;
+			out vec4 v_color;
+			
+			void main()
+			{
+				v_position = a_position * 0.5 + 0.5;
+				v_color = a_color;
+				gl_Position = vec4(a_position, 1.0);
+			}
+		)";
+		
+		std::string fragmentSrc = R"(
+			#version 330 core
+			
+			
+			in vec3 v_position;
+			in vec4 v_color;
+			
+			out vec4 color;
+
+			void main()
+			{
+				color = v_color;
+			}
+		)";
+
+		// Equivalent to make_unique
+		m_shader.reset(new Shader(vertexSrc, fragmentSrc));
+
+		//////// Blue Square
+		float squareVertices[4 * 3] = {
+			-0.75f, -0.75f, 0.0f,
+			 0.75f, -0.75f, 0.0f,
+			 0.75f,  0.75f, 0.0f,
+			-0.75f,  0.75f, 0.0f,
+		};
+
+		m_squareVA.reset(m_squareVA->Create());
+		std::shared_ptr<VertexBuffer> squareVB;
+		squareVB.reset(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+
+		squareVB->SetLayout({
+			{ ShaderDataType::Float3, "a_position" },
+		});
+
+		m_squareVA->AddVertexBuffer(squareVB);
+
+		uint32_t squareIndices[6] = {
+			0, 1, 2,
+			2, 3, 0
+		};
+
+		std::shared_ptr<IndexBuffer> squareIB;
+		squareIB.reset(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		m_squareVA->SetIndexBuffer(squareIB);
+
+		std::string vertexSrcBlue = R"(
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_position;
@@ -54,10 +121,9 @@ namespace Volum
 				gl_Position = vec4(a_position, 1.0);
 			}
 		)";
-		
-		std::string fragmentSrc = R"(
+
+		std::string fragmentSrcBlue = R"(
 			#version 330 core
-			
 			
 			in vec3 v_position;
 			
@@ -65,12 +131,12 @@ namespace Volum
 
 			void main()
 			{
-				color = vec4(v_position, 1.0);
+				color = vec4(0.2, 0.3, 0.8, 1.0);
 			}
 		)";
 
 		// Equivalent to make_unique
-		m_shader.reset(new Shader(vertexSrc, fragmentSrc));
+		m_shaderBlue.reset(new Shader(vertexSrcBlue, fragmentSrcBlue));
 	}
 
 	Application::~Application()
@@ -81,12 +147,18 @@ namespace Volum
 	{
 		while (m_running)
 		{
-			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderCommand::SetClearColor({ 1.0f, 0.0f, 1.0f, 1.0f });
+			RenderCommand::Clear();
 
+			Renderer::BeginScene();
+
+			m_shaderBlue->Bind();
+			Renderer::Submit(m_squareVA);
+			
 			m_shader->Bind();
-			glBindVertexArray(m_vertexArray);
-			glDrawElements(GL_TRIANGLES, m_indexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Renderer::Submit(m_vertexArray);
+
+			Renderer::EndScene();
 
 			for (Layer* layer : m_layerStack)
 				layer->OnUpdate();
