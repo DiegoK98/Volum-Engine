@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Renderer/RendererAPI.h"
+#include "Volum/Renderer/RendererAPI.h"
 
 namespace Volum
 {

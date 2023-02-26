@@ -1,5 +1,5 @@
 #pragma once
-#include "Renderer/GraphicsContext.h"
+#include "Volum/Renderer/GraphicsContext.h"
 
 // Forw decl
 struct GLFWwindow;

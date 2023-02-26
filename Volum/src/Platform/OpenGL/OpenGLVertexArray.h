@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Renderer/VertexArray.h"
+#include "Volum/Renderer/VertexArray.h"
 
 namespace Volum
 {

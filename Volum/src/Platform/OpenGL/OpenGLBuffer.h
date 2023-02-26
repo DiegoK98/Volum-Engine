@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Renderer/Buffer.h"
+#include "Volum/Renderer/Buffer.h"
 
 namespace Volum
 {

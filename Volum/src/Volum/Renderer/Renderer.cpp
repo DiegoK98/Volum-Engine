@@ -16,10 +16,11 @@ namespace Volum
 	{
 	}
 
-	void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray)
+	void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& modelTransformMat)
 	{
 		shader->Bind();
 		shader->UploadUniformMat4("u_viewProjMat", m_sceneData->viewProjMat);
+		shader->UploadUniformMat4("u_modelMat", modelTransformMat);
 		
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);

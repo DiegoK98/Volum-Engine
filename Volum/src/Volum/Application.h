@@ -6,10 +6,7 @@
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 #include "Volum/ImGui/ImGuiLayer.h"
-#include "Renderer/Shader.h"
-#include "Renderer/Buffer.h"
-#include "Renderer/VertexArray.h"
-#include "Renderer/OrthographicCamera.h"
+#include "Volum/Core/TimeStep.h"
 
 namespace Volum
 {
@@ -36,14 +33,7 @@ namespace Volum
 		ImGuiLayer* m_imGuiLayer;
 		bool m_running = true;
 		LayerStack m_layerStack;
-
-		std::shared_ptr<VertexArray> m_vertexArray;
-		std::shared_ptr<Shader> m_shader;
-
-		std::shared_ptr<VertexArray> m_squareVA;
-		std::shared_ptr<Shader> m_shaderBlue;
-
-		OrthographicCamera m_camera;
+		float m_lastFrameTime = 0.0f;
 
 		static Application* s_instance;
 	};
