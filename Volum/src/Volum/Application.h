@@ -9,6 +9,7 @@
 #include "Renderer/Shader.h"
 #include "Renderer/Buffer.h"
 #include "Renderer/VertexArray.h"
+#include "Renderer/OrthographicCamera.h"
 
 namespace Volum
 {
@@ -41,6 +42,8 @@ namespace Volum
 
 		std::shared_ptr<VertexArray> m_squareVA;
 		std::shared_ptr<Shader> m_shaderBlue;
+
+		OrthographicCamera m_camera;
 
 		static Application* s_instance;
 	};

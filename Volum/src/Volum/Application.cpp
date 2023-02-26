@@ -10,6 +10,7 @@ namespace Volum
 	Application* Application::s_instance = nullptr;
 
 	Application::Application()
+		: m_camera(OrthographicCamera(-1.6f, 1.6f, -0.9f, 0.9f))
 	{
 		VLM_CORE_ASSERT(!s_instance, "Application already exists!");
 		s_instance = this;
@@ -23,9 +24,9 @@ namespace Volum
 		m_vertexArray.reset(VertexArray::Create());
 
 		float vertices[3 * 7] = {
-			-0.5f, -0.5f, 0.0f,		0.8f, 0.3f, 0.1f, 1.0f,
-			 0.5f, -0.5f, 0.0f,		0.3f, 0.8f, 0.1f, 1.0f,
-			 0.0f,  0.5f, 0.0f,		0.6f, 0.1f, 0.6f, 1.0f,
+			-0.5f, -0.388f, 0.0f,		0.8f, 0.3f, 0.1f, 1.0f,
+			 0.5f, -0.388f, 0.0f,		0.3f, 0.8f, 0.1f, 1.0f,
+			 0.0f,  0.477f, 0.0f,		0.6f, 0.1f, 0.6f, 1.0f,
 		};
 
 		std::shared_ptr<VertexBuffer> triangleVB;
@@ -52,6 +53,8 @@ namespace Volum
 			layout(location = 0) in vec3 a_position;
 			layout(location = 1) in vec4 a_color;
 			
+			uniform mat4 u_viewProjMat;
+
 			out vec3 v_position;
 			out vec4 v_color;
 			
@@ -59,7 +62,7 @@ namespace Volum
 			{
 				v_position = a_position * 0.5 + 0.5;
 				v_color = a_color;
-				gl_Position = vec4(a_position, 1.0);
+				gl_Position = u_viewProjMat * vec4(a_position, 1.0);
 			}
 		)";
 		
@@ -113,12 +116,14 @@ namespace Volum
 			
 			layout(location = 0) in vec3 a_position;
 			
+			uniform mat4 u_viewProjMat;
+			
 			out vec3 v_position;
 			
 			void main()
 			{
 				v_position = a_position * 0.5 + 0.5;
-				gl_Position = vec4(a_position, 1.0);
+				gl_Position = u_viewProjMat * vec4(a_position, 1.0);
 			}
 		)";
 
@@ -146,13 +151,13 @@ namespace Volum
 			RenderCommand::SetClearColor({ 1.0f, 0.0f, 1.0f, 1.0f });
 			RenderCommand::Clear();
 
-			Renderer::BeginScene();
+			m_camera.SetPosition({ 0.5f, 0.5f, 0.0f });
+			m_camera.SetRotation(45.0f);
 
-			m_shaderBlue->Bind();
-			Renderer::Submit(m_squareVA);
-			
-			m_shader->Bind();
-			Renderer::Submit(m_vertexArray);
+			Renderer::BeginScene(m_camera);
+
+			Renderer::Submit(m_shaderBlue, m_squareVA);
+			Renderer::Submit(m_shader, m_vertexArray);
 
 			Renderer::EndScene();
 
