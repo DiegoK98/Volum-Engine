@@ -17,6 +17,7 @@ IncludeDir["GLFW"] = "Volum/vendor/GLFW/include"
 IncludeDir["Glad"] = "Volum/vendor/Glad/include"
 IncludeDir["ImGui"] = "Volum/vendor/ImGui"
 IncludeDir["glm"] = "Volum/vendor/glm"
+IncludeDir["stb_image"] = "Volum/vendor/stb_image"
 
 group "Dependencies"
     include "Volum/vendor/GLFW"
@@ -42,7 +43,9 @@ project "Volum"
     files
     {
         "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
+        "%{prj.name}/src/**.cpp",
+        "%{prj.name}/vendor/stb_image/**.h",
+        "%{prj.name}/vendor/stb_image/**.cpp",
     }
 
     defines
@@ -57,7 +60,8 @@ project "Volum"
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.Glad}",
         "%{IncludeDir.ImGui}",
-        "%{IncludeDir.glm}"
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.stb_image}",
     }
 
     links

@@ -13,7 +13,7 @@ public:
 		: Layer("Example"), m_camera(Volum::OrthographicCamera(-1.6f, 1.6f, -0.9f, 0.9f)), m_cameraPosition(0.0f),
 		m_trianglePosition(0.0f)
 	{
-		m_vertexArray.reset(Volum::VertexArray::Create());
+		m_vertexArray = Volum::VertexArray::Create();
 
 		float vertices[3 * 7] = {
 			-0.5f, -0.388f, 0.0f,		0.8f, 0.3f, 0.1f, 1.0f,
@@ -22,7 +22,7 @@ public:
 		};
 
 		Volum::Ref<Volum::VertexBuffer> triangleVB;
-		triangleVB.reset(Volum::VertexBuffer::Create(vertices, sizeof(vertices)));
+		triangleVB = Volum::VertexBuffer::Create(vertices, sizeof(vertices));
 
 		triangleVB->SetLayout({
 			{ Volum::ShaderDataType::Float3, "a_position" },
@@ -36,7 +36,7 @@ public:
 		};
 
 		Volum::Ref<Volum::IndexBuffer> triangleIB;
-		triangleIB.reset(Volum::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		triangleIB = Volum::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_vertexArray->SetIndexBuffer(triangleIB);
 
 		std::string vertexSrc = R"(
@@ -75,22 +75,23 @@ public:
 		)";
 
 		// Equivalent to make_unique
-		m_shader.reset(Volum::Shader::Create(vertexSrc, fragmentSrc));
+		m_shader = Volum::Shader::Create(vertexSrc, fragmentSrc);
 
 		//////// Blue Square
-		float squareVertices[4 * 3] = {
-			-0.75f, -0.75f, 0.0f,
-			 0.75f, -0.75f, 0.0f,
-			 0.75f,  0.75f, 0.0f,
-			-0.75f,  0.75f, 0.0f,
+		float squareVertices[4 * 5] = {
+			-0.75f, -0.75f, 0.0f,		0.0f, 0.0f,
+			 0.75f, -0.75f, 0.0f,		1.0f, 0.0f,
+			 0.75f,  0.75f, 0.0f,		1.0f, 1.0f,
+			-0.75f,  0.75f, 0.0f,		0.0f, 1.0f,
 		};
 
-		m_squareVA.reset(m_squareVA->Create());
+		m_squareVA = m_squareVA->Create();
 		Volum::Ref<Volum::VertexBuffer> squareVB;
-		squareVB.reset(Volum::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		squareVB = Volum::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 
 		squareVB->SetLayout({
 			{ Volum::ShaderDataType::Float3, "a_position" },
+			{ Volum::ShaderDataType::Float2, "a_texCoords" },
 			});
 
 		m_squareVA->AddVertexBuffer(squareVB);
@@ -101,7 +102,7 @@ public:
 		};
 
 		Volum::Ref<Volum::IndexBuffer> squareIB;
-		squareIB.reset(Volum::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		squareIB = Volum::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 		m_squareVA->SetIndexBuffer(squareIB);
 
 		std::string vertexSrcColor = R"(
@@ -137,7 +138,49 @@ public:
 		)";
 
 		// Equivalent to make_unique
-		m_shaderColor.reset(Volum::Shader::Create(vertexSrcColor, fragmentSrcColor));
+		m_shaderColor = Volum::Shader::Create(vertexSrcColor, fragmentSrcColor);
+
+		std::string vertexSrcTex = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_position;
+			layout(location = 1) in vec2 a_texCoords;
+			
+			uniform mat4 u_viewProjMat;
+			uniform mat4 u_modelMat;
+			
+			out vec2 v_texCoords;
+			
+			void main()
+			{
+				v_texCoords = a_texCoords;
+				gl_Position = u_viewProjMat * u_modelMat * vec4(a_position, 1.0);
+			}
+		)";
+
+		std::string fragmentSrcTex = R"(
+			#version 330 core
+			
+			in vec2 v_texCoords;
+			
+			uniform sampler2D u_albedoTex;
+			
+			out vec4 color;
+
+			void main()
+			{
+				color = texture(u_albedoTex, v_texCoords);
+				//color = vec4(v_texCoords, 0.0, 1.0);
+			}
+		)";
+
+		// Equivalent to make_unique
+		m_shaderTex = Volum::Shader::Create(vertexSrcTex, fragmentSrcTex);
+
+		m_texture = Volum::Texture2D::Create("assets/textures/checkerboard.png");
+
+		m_shaderTex->Bind();
+		std::dynamic_pointer_cast<Volum::OpenGLShader>(m_shaderTex)->UploadUniformInt("u_texture", 0);
 	}
 
 	void OnUpdate(Volum::TimeStep ts) override
@@ -199,7 +242,8 @@ public:
 			}
 		}
 
-		Volum::Renderer::Submit(m_shader, m_vertexArray, triangleTransform);
+		m_texture->Bind();
+		Volum::Renderer::Submit(m_shaderTex, m_squareVA, glm::scale(triangleTransform, glm::vec3(1.5f)));
 
 		Volum::Renderer::EndScene();
 	}
@@ -223,6 +267,9 @@ private:
 
 	Volum::Ref<Volum::VertexArray> m_squareVA;
 	Volum::Ref<Volum::Shader> m_shaderColor;
+	Volum::Ref<Volum::Shader> m_shaderTex;
+
+	Volum::Ref<Volum::Texture2D> m_texture;
 
 	Volum::OrthographicCamera m_camera;
 	glm::vec3 m_cameraPosition;
