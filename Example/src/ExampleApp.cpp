@@ -21,7 +21,7 @@ public:
 			 0.0f,  0.477f, 0.0f,		0.6f, 0.1f, 0.6f, 1.0f,
 		};
 
-		std::shared_ptr<Volum::VertexBuffer> triangleVB;
+		Volum::Ref<Volum::VertexBuffer> triangleVB;
 		triangleVB.reset(Volum::VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		triangleVB->SetLayout({
@@ -35,7 +35,7 @@ public:
 			0, 1, 2
 		};
 
-		std::shared_ptr<Volum::IndexBuffer> triangleIB;
+		Volum::Ref<Volum::IndexBuffer> triangleIB;
 		triangleIB.reset(Volum::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_vertexArray->SetIndexBuffer(triangleIB);
 
@@ -86,7 +86,7 @@ public:
 		};
 
 		m_squareVA.reset(m_squareVA->Create());
-		std::shared_ptr<Volum::VertexBuffer> squareVB;
+		Volum::Ref<Volum::VertexBuffer> squareVB;
 		squareVB.reset(Volum::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 
 		squareVB->SetLayout({
@@ -100,7 +100,7 @@ public:
 			2, 3, 0
 		};
 
-		std::shared_ptr<Volum::IndexBuffer> squareIB;
+		Volum::Ref<Volum::IndexBuffer> squareIB;
 		squareIB.reset(Volum::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 		m_squareVA->SetIndexBuffer(squareIB);
 
@@ -218,11 +218,11 @@ public:
 	}
 
 private:
-	std::shared_ptr<Volum::VertexArray> m_vertexArray;
-	std::shared_ptr<Volum::Shader> m_shader;
+	Volum::Ref<Volum::VertexArray> m_vertexArray;
+	Volum::Ref<Volum::Shader> m_shader;
 
-	std::shared_ptr<Volum::VertexArray> m_squareVA;
-	std::shared_ptr<Volum::Shader> m_shaderColor;
+	Volum::Ref<Volum::VertexArray> m_squareVA;
+	Volum::Ref<Volum::Shader> m_shaderColor;
 
 	Volum::OrthographicCamera m_camera;
 	glm::vec3 m_cameraPosition;
