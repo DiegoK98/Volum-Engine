@@ -47,12 +47,10 @@ public:
 			uniform mat4 u_viewProjMat;
 			uniform mat4 u_modelMat;
 			
-			out vec3 v_position;
 			out vec4 v_color;
 			
 			void main()
 			{
-				v_position = a_position * 0.5 + 0.5;
 				v_color = a_color;
 				gl_Position = u_viewProjMat * u_modelMat * vec4(a_position, 1.0);
 			}
@@ -61,8 +59,6 @@ public:
 		std::string fragmentSrc = R"(
 			#version 330 core
 			
-			
-			in vec3 v_position;
 			in vec4 v_color;
 			
 			out vec4 color;
@@ -74,7 +70,7 @@ public:
 		)";
 
 		// Equivalent to make_unique
-		m_shader = Volum::Shader::Create(vertexSrc, fragmentSrc);
+		m_shader = Volum::Shader::Create("VertexColor", vertexSrc, fragmentSrc);
 
 		//////// Blue Square
 		float squareVertices[4 * 5] = {
@@ -104,7 +100,7 @@ public:
 		squareIB = Volum::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 		m_squareVA->SetIndexBuffer(squareIB);
 
-		std::string vertexSrcColor = R"(
+		std::string vertexSrcFlatColor = R"(
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_position;
@@ -121,7 +117,7 @@ public:
 			}
 		)";
 
-		std::string fragmentSrcColor = R"(
+		std::string fragmentSrcFlatColor = R"(
 			#version 330 core
 			
 			in vec3 v_position;
@@ -136,15 +132,15 @@ public:
 			}
 		)";
 
-		m_shaderColor = Volum::Shader::Create(vertexSrcColor, fragmentSrcColor);
+		m_shaderFlatColor = Volum::Shader::Create("FlatColor", vertexSrcFlatColor, fragmentSrcFlatColor);
 
-		m_shaderTex = Volum::Shader::Create("assets/shaders/Texture.glsl");
+		auto texture_shader = m_shaderLibrary.Load("assets/shaders/Texture.glsl");
 
 		m_texture = Volum::Texture2D::Create("assets/textures/checkerboard.png");
 		m_textureLeaves = Volum::Texture2D::Create("assets/textures/leaves.png");
 
-		m_shaderTex->Bind();
-		std::dynamic_pointer_cast<Volum::OpenGLShader>(m_shaderTex)->UploadUniformInt("u_texture", 0);
+		texture_shader->Bind();
+		std::dynamic_pointer_cast<Volum::OpenGLShader>(texture_shader)->UploadUniformInt("u_texture", 0);
 	}
 
 	void OnUpdate(Volum::TimeStep ts) override
@@ -192,8 +188,8 @@ public:
 		glm::vec4 blueColor(0.3f, 0.2f, 0.8f, 1.0f);
 		glm::vec4 redColor(0.8f, 0.2f, 0.3f, 1.0f);
 
-		m_shaderColor->Bind();
-		std::dynamic_pointer_cast<Volum::OpenGLShader>(m_shaderColor)->UploadUniformFloat3("u_color", m_squareColor);
+		m_shaderFlatColor->Bind();
+		std::dynamic_pointer_cast<Volum::OpenGLShader>(m_shaderFlatColor)->UploadUniformFloat3("u_color", m_squareColor);
 
 		for (int y = 0; y < 20; y++)
 		{
@@ -202,14 +198,16 @@ public:
 				glm::vec3 pos(x * 0.18f, y * 0.18f, 0.0f);
 				glm::mat4 squareTransform = glm::translate(glm::mat4(1.0f), pos) * scale;
 
-				Volum::Renderer::Submit(m_shaderColor, m_squareVA, squareTransform);
+				Volum::Renderer::Submit(m_shaderFlatColor, m_squareVA, squareTransform);
 			}
 		}
 
+		auto textureShader = m_shaderLibrary.Get("Texture");
+
 		m_texture->Bind();
-		Volum::Renderer::Submit(m_shaderTex, m_squareVA, triangleTransform);
+		Volum::Renderer::Submit(textureShader, m_squareVA, triangleTransform);
 		m_textureLeaves->Bind();
-		Volum::Renderer::Submit(m_shaderTex, m_squareVA, triangleTransform);
+		Volum::Renderer::Submit(textureShader, m_squareVA, triangleTransform);
 
 		Volum::Renderer::EndScene();
 	}
@@ -228,12 +226,12 @@ public:
 	}
 
 private:
+	Volum::ShaderLibrary m_shaderLibrary;
 	Volum::Ref<Volum::VertexArray> m_vertexArray;
 	Volum::Ref<Volum::Shader> m_shader;
 
 	Volum::Ref<Volum::VertexArray> m_squareVA;
-	Volum::Ref<Volum::Shader> m_shaderColor;
-	Volum::Ref<Volum::Shader> m_shaderTex;
+	Volum::Ref<Volum::Shader> m_shaderFlatColor;
 
 	Volum::Ref<Volum::Texture2D> m_texture;
 	Volum::Ref<Volum::Texture2D> m_textureLeaves;

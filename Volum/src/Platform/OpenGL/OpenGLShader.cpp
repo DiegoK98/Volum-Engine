@@ -7,6 +7,8 @@
 #include <glad/gl.h>
 #include <glm/gtc/type_ptr.hpp>
 
+#define VLM_MAX_SHADERS 2
+
 namespace Volum
 {
 	static GLenum ShaderTypeFromString(const std::string& type)
@@ -23,9 +25,18 @@ namespace Volum
 		std::string source = ReadFile(filepath);
 		auto shaderSources = PreProcess(source);
 		Compile(shaderSources);
+
+		// Extract name from filepath
+		auto lastSlash = filepath.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = filepath.rfind(".");
+		auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+
+		m_name = filepath.substr(lastSlash, count);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+		: m_name(name)
 	{
 		std::unordered_map<GLenum, std::string> sources;
 
@@ -42,7 +53,7 @@ namespace Volum
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
 		std::string result;
-		std::ifstream in(filepath, std::ios::in, std::ios::binary);
+		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 
 		if (in)
 		{
@@ -87,7 +98,10 @@ namespace Volum
 	{
 		// Create program and shaders
 		GLuint program = glCreateProgram();
-		std::vector<GLenum> glShaderIDs(shaderSources.size());
+		VLM_CORE_ASSERT(shaderSources.size() <= VLM_MAX_SHADERS, "Surpassed max number of shaders in a program!");
+		std::array<GLenum, VLM_MAX_SHADERS> glShaderIDs;
+		int glShaderIDIndex = 0;
+
 		for (auto& kv : shaderSources)
 		{
 			GLenum shaderType = kv.first;
@@ -119,7 +133,7 @@ namespace Volum
 			}
 
 			glAttachShader(program, shader);
-			glShaderIDs.push_back(shader);
+			glShaderIDs[glShaderIDIndex++] = shader;
 		}
 
 		// Link the program
