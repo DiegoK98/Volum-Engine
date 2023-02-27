@@ -178,6 +178,7 @@ public:
 		m_shaderTex = Volum::Shader::Create(vertexSrcTex, fragmentSrcTex);
 
 		m_texture = Volum::Texture2D::Create("assets/textures/checkerboard.png");
+		m_textureLeaves = Volum::Texture2D::Create("assets/textures/leaves.png");
 
 		m_shaderTex->Bind();
 		std::dynamic_pointer_cast<Volum::OpenGLShader>(m_shaderTex)->UploadUniformInt("u_texture", 0);
@@ -243,7 +244,9 @@ public:
 		}
 
 		m_texture->Bind();
-		Volum::Renderer::Submit(m_shaderTex, m_squareVA, glm::scale(triangleTransform, glm::vec3(1.5f)));
+		Volum::Renderer::Submit(m_shaderTex, m_squareVA, triangleTransform);
+		m_textureLeaves->Bind();
+		Volum::Renderer::Submit(m_shaderTex, m_squareVA, triangleTransform);
 
 		Volum::Renderer::EndScene();
 	}
@@ -270,6 +273,7 @@ private:
 	Volum::Ref<Volum::Shader> m_shaderTex;
 
 	Volum::Ref<Volum::Texture2D> m_texture;
+	Volum::Ref<Volum::Texture2D> m_textureLeaves;
 
 	Volum::OrthographicCamera m_camera;
 	glm::vec3 m_cameraPosition;

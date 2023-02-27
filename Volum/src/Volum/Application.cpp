@@ -18,6 +18,8 @@ namespace Volum
 		m_window = std::unique_ptr<Window>(Window::Create());
 		m_window->SetEventCallback(VLM_BIND_EVENT_FN(Application::OnEvent));
 
+		Renderer::Init();
+
 		m_imGuiLayer = new ImGuiLayer();
 		PushOverlay(m_imGuiLayer);
 	}

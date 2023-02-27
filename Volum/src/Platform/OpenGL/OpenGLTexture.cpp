@@ -16,17 +16,16 @@ namespace Volum
 		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 		VLM_CORE_ASSERT(data, "Failed to load image!");
 
-		GLenum internalFormat;
-		GLenum format;
+		GLenum internalFormat = 0, dataFormat = 0;
 		switch (channels)
 		{
 			case 3:
 				internalFormat = GL_RGB8;
-				format = GL_RGB;
+				dataFormat = GL_RGB;
 				break;
 			case 4:
 				internalFormat = GL_RGBA8;
-				format = GL_RGBA;
+				dataFormat = GL_RGBA;
 				break;
 			default:
 				VLM_CORE_ASSERT(false, "Unexpected format in texture!");
@@ -43,7 +42,7 @@ namespace Volum
 		/*glTexParameteri(m_rendererID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(m_rendererID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);*/
 
-		glTextureSubImage2D(m_rendererID, 0, 0, 0, m_width, m_height, format, GL_UNSIGNED_BYTE, data);
+		glTextureSubImage2D(m_rendererID, 0, 0, 0, m_width, m_height, dataFormat, GL_UNSIGNED_BYTE, data);
 
 		stbi_image_free(data);
 	}
