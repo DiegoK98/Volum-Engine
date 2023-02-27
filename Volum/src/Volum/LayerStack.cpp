@@ -31,7 +31,7 @@ namespace Volum {
 	void LayerStack::PopLayer(Layer* layer)
 	{
 		auto it = std::find(m_layers.begin(), m_layers.begin() + m_LayerInsertIndex, layer);
-		if (it != m_layers.end())
+		if (it != m_layers.begin() + m_LayerInsertIndex)
 		{
 			layer->OnDetach();
 			m_layers.erase(it);
