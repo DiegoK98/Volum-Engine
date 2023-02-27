@@ -10,8 +10,7 @@ class ExampleLayer : public Volum::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example"), m_camera(Volum::OrthographicCamera(-1.6f, 1.6f, -0.9f, 0.9f)), m_cameraPosition(0.0f),
-		m_trianglePosition(0.0f)
+		: Layer("Example"), m_camera(Volum::OrthographicCamera(-3.2f, 3.2f, -1.8f, 1.8f)), m_cameraPosition(0.0f), m_trianglePosition(0.0f)
 	{
 		m_vertexArray = Volum::VertexArray::Create();
 
@@ -137,45 +136,9 @@ public:
 			}
 		)";
 
-		// Equivalent to make_unique
 		m_shaderColor = Volum::Shader::Create(vertexSrcColor, fragmentSrcColor);
 
-		std::string vertexSrcTex = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_position;
-			layout(location = 1) in vec2 a_texCoords;
-			
-			uniform mat4 u_viewProjMat;
-			uniform mat4 u_modelMat;
-			
-			out vec2 v_texCoords;
-			
-			void main()
-			{
-				v_texCoords = a_texCoords;
-				gl_Position = u_viewProjMat * u_modelMat * vec4(a_position, 1.0);
-			}
-		)";
-
-		std::string fragmentSrcTex = R"(
-			#version 330 core
-			
-			in vec2 v_texCoords;
-			
-			uniform sampler2D u_albedoTex;
-			
-			out vec4 color;
-
-			void main()
-			{
-				color = texture(u_albedoTex, v_texCoords);
-				//color = vec4(v_texCoords, 0.0, 1.0);
-			}
-		)";
-
-		// Equivalent to make_unique
-		m_shaderTex = Volum::Shader::Create(vertexSrcTex, fragmentSrcTex);
+		m_shaderTex = Volum::Shader::Create("assets/shaders/Texture.glsl");
 
 		m_texture = Volum::Texture2D::Create("assets/textures/checkerboard.png");
 		m_textureLeaves = Volum::Texture2D::Create("assets/textures/leaves.png");
