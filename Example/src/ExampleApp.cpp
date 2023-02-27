@@ -1,8 +1,10 @@
 #include <Volum.h>
 
-#include <ImGui/imgui.h>
+#include "Platform/OpenGL/OpenGLShader.h"
 
+#include <ImGui/imgui.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class ExampleLayer : public Volum::Layer
 {
@@ -73,7 +75,7 @@ public:
 		)";
 
 		// Equivalent to make_unique
-		m_shader.reset(new Volum::Shader(vertexSrc, fragmentSrc));
+		m_shader.reset(Volum::Shader::Create(vertexSrc, fragmentSrc));
 
 		//////// Blue Square
 		float squareVertices[4 * 3] = {
@@ -102,7 +104,7 @@ public:
 		squareIB.reset(Volum::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 		m_squareVA->SetIndexBuffer(squareIB);
 
-		std::string vertexSrcBlue = R"(
+		std::string vertexSrcColor = R"(
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_position;
@@ -119,21 +121,23 @@ public:
 			}
 		)";
 
-		std::string fragmentSrcBlue = R"(
+		std::string fragmentSrcColor = R"(
 			#version 330 core
 			
 			in vec3 v_position;
+			
+			uniform vec3 u_color;
 			
 			out vec4 color;
 
 			void main()
 			{
-				color = vec4(0.2, 0.3, 0.8, 1.0);
+				color = vec4(u_color, 1.0);
 			}
 		)";
 
 		// Equivalent to make_unique
-		m_shaderBlue.reset(new Volum::Shader(vertexSrcBlue, fragmentSrcBlue));
+		m_shaderColor.reset(Volum::Shader::Create(vertexSrcColor, fragmentSrcColor));
 	}
 
 	void OnUpdate(Volum::TimeStep ts) override
@@ -178,15 +182,20 @@ public:
 		glm::mat4 triangleTransform = glm::translate(glm::mat4(1.0f), m_trianglePosition);
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
+		glm::vec4 blueColor(0.3f, 0.2f, 0.8f, 1.0f);
+		glm::vec4 redColor(0.8f, 0.2f, 0.3f, 1.0f);
+
+		m_shaderColor->Bind();
+		std::dynamic_pointer_cast<Volum::OpenGLShader>(m_shaderColor)->UploadUniformFloat3("u_color", m_squareColor);
+
 		for (int y = 0; y < 20; y++)
 		{
 			for (int x = 0; x < 20; x++)
 			{
 				glm::vec3 pos(x * 0.18f, y * 0.18f, 0.0f);
-
 				glm::mat4 squareTransform = glm::translate(glm::mat4(1.0f), pos) * scale;
 
-				Volum::Renderer::Submit(m_shaderBlue, m_squareVA, squareTransform);
+				Volum::Renderer::Submit(m_shaderColor, m_squareVA, squareTransform);
 			}
 		}
 
@@ -197,7 +206,11 @@ public:
 
 	void OnImGuiRender() override
 	{
-
+		ImGui::Begin("Settings");
+		
+		ImGui::ColorEdit3("Square color", glm::value_ptr(m_squareColor));
+		
+		ImGui::End();
 	}
 
 	void OnEvent(Volum::Event& event) override
@@ -209,7 +222,7 @@ private:
 	std::shared_ptr<Volum::Shader> m_shader;
 
 	std::shared_ptr<Volum::VertexArray> m_squareVA;
-	std::shared_ptr<Volum::Shader> m_shaderBlue;
+	std::shared_ptr<Volum::Shader> m_shaderColor;
 
 	Volum::OrthographicCamera m_camera;
 	glm::vec3 m_cameraPosition;
@@ -219,6 +232,8 @@ private:
 
 	glm::vec3 m_trianglePosition;
 	float m_triangleMoveSpeed = 1.0f;
+
+	glm::vec3 m_squareColor = { 0.3f, 0.2f, 0.8f };
 };
 
 class Example : public Volum::Application
