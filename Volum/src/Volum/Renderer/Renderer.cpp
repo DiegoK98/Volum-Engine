@@ -2,7 +2,6 @@
 
 #include "Renderer.h"
 #include "RenderCommand.h"
-#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Volum
 {
