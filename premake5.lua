@@ -1,6 +1,6 @@
 workspace "Volum"
     architecture "x64"
-    startproject "Example"
+    startproject "Sandbox"
 
     configurations
     {
@@ -102,8 +102,8 @@ project "Volum"
         runtime "Release"
         optimize "on"
 
-project "Example"
-    location "Example"
+project "Sandbox"
+    location "Sandbox"
     kind "ConsoleApp"
     language "C++"
     cppdialect "C++20"

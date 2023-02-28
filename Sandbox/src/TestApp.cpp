@@ -6,10 +6,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-class ExampleLayer : public Volum::Layer
+class TestLayer : public Volum::Layer
 {
 public:
-	ExampleLayer()
+	TestLayer()
 		: Layer("Example"), m_camera(Volum::OrthographicCamera(-3.2f, 3.2f, -1.8f, 1.8f)), m_cameraPosition(0.0f), m_trianglePosition(0.0f)
 	{
 		m_vertexArray = Volum::VertexArray::Create();
@@ -248,15 +248,15 @@ private:
 	glm::vec3 m_squareColor = { 0.3f, 0.2f, 0.8f };
 };
 
-class Example : public Volum::Application
+class Test : public Volum::Application
 {
 public:
-	Example()
+	Test()
 	{
-		PushLayer(new ExampleLayer());
+		PushLayer(new TestLayer());
 	}
 
-	~Example()
+	~Test()
 	{
 
 	}
@@ -266,5 +266,5 @@ Volum::Application* Volum::CreateApplication()
 {
 	VLM_WARN("This is an example");
 
-	return new Example();
+	return new Test();
 }
