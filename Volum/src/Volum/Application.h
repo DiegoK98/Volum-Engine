@@ -28,10 +28,12 @@ namespace Volum
 		inline static Application& Get() { return *s_instance; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
 		
 		std::unique_ptr<Window> m_window;
 		ImGuiLayer* m_imGuiLayer;
 		bool m_running = true;
+		bool m_minimized = false;
 		LayerStack m_layerStack;
 		float m_lastFrameTime = 0.0f;
 

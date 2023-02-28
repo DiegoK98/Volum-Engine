@@ -32,14 +32,15 @@ namespace Volum
 			TimeStep timeStep = time - m_lastFrameTime;
 			m_lastFrameTime = time;
 
-			for (Layer* layer : m_layerStack)
-				layer->OnUpdate(timeStep);
+			if (!m_minimized)
+			{
+				for (Layer* layer : m_layerStack)
+					layer->OnUpdate(timeStep);
+			}
 
 			m_imGuiLayer->Begin();
-
 			for (Layer* layer : m_layerStack)
 				layer->OnImGuiRender();
-
 			m_imGuiLayer->End();
 
 			m_window->OnUpdate();
@@ -51,8 +52,7 @@ namespace Volum
 		EventDispatcher dispatcher(e);
 
 		dispatcher.Dispatch<WindowCloseEvent>(VLM_BIND_EVENT_FN(Application::OnWindowClose));
-
-		VLM_CORE_TRACE("{0}", e);
+		dispatcher.Dispatch<WindowResizeEvent>(VLM_BIND_EVENT_FN(Application::OnWindowResize));
 
 		for (auto it = m_layerStack.end(); it != m_layerStack.begin(); )
 		{
@@ -77,5 +77,20 @@ namespace Volum
 		m_running = false;
 
 		return true;
+	}
+
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+		if (e.GetWidth() == 0 || e.GetHeight() == 0)
+		{
+			m_minimized = true;
+			return false;
+		}
+
+		m_minimized = false;
+
+		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+
+		return false;
 	}
 }
