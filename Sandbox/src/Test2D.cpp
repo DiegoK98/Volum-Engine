@@ -62,7 +62,7 @@ void Test2D::OnUpdate(Volum::TimeStep ts)
 	Volum::Renderer::BeginScene(m_cameraController.GetCamera());
 
 	m_flatColorShader->Bind();
-	std::dynamic_pointer_cast<Volum::OpenGLShader>(m_flatColorShader)->UploadUniformFloat4("u_color", m_squareColor);
+	m_flatColorShader->UploadUniformFloat4("u_color", m_squareColor);
 
 	Volum::Renderer::Submit(m_flatColorShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 

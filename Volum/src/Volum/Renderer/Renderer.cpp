@@ -30,8 +30,8 @@ namespace Volum
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& modelTransformMat)
 	{
 		shader->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_viewProjMat", s_sceneData->viewProjMat);
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_modelMat", modelTransformMat);
+		shader->UploadUniformMat4("u_viewProjMat", s_sceneData->viewProjMat);
+		shader->UploadUniformMat4("u_modelMat", modelTransformMat);
 		
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);

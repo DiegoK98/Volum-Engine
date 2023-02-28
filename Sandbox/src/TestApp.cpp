@@ -143,7 +143,7 @@ public:
 		m_textureLeaves = Volum::Texture2D::Create("assets/textures/leaves.png");
 
 		texture_shader->Bind();
-		std::dynamic_pointer_cast<Volum::OpenGLShader>(texture_shader)->UploadUniformInt("u_texture", 0);
+		texture_shader->UploadUniformInt("u_texture", 0);
 	}
 
 	void OnUpdate(Volum::TimeStep ts) override
@@ -174,7 +174,7 @@ public:
 		glm::vec4 redColor(0.8f, 0.2f, 0.3f, 1.0f);
 
 		m_shaderFlatColor->Bind();
-		std::dynamic_pointer_cast<Volum::OpenGLShader>(m_shaderFlatColor)->UploadUniformFloat3("u_color", m_squareColor);
+		m_shaderFlatColor->UploadUniformFloat3("u_color", m_squareColor);
 
 		for (int y = 0; y < 20; y++)
 		{
