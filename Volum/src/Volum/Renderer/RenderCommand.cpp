@@ -6,5 +6,5 @@
 
 namespace Volum
 {
-	RendererAPI* RenderCommand::s_rendererAPI = new OpenGLRendererAPI;
+	Scope<RendererAPI> RenderCommand::s_rendererAPI = CreateScope<OpenGLRendererAPI>();
 }

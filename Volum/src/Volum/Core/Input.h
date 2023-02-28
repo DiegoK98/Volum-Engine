@@ -12,17 +12,17 @@ namespace Volum
 		Input(const Input&) = delete;
 		Input& operator=(const Input&) = delete;
 
-		inline static bool isKeyPressed(int keycode) { return s_instance->isKeyPressedImpl(keycode); }
-		inline static float isMouseButtonPressed(int button) { return s_instance->isMouseButtonPressedImpl(button); }
+		inline static bool IsKeyPressed(int keycode) { return s_instance->IsKeyPressedImpl(keycode); }
+		inline static float IsMouseButtonPressed(int button) { return s_instance->IsMouseButtonPressedImpl(button); }
 		inline static std::pair<float, float> GetMousePos() { return s_instance->GetMousePosImpl(); }
 
 	protected:
-		virtual bool isKeyPressedImpl(int keycode) = 0;
-		virtual float isMouseButtonPressedImpl(int button) = 0;
+		virtual bool IsKeyPressedImpl(int keycode) = 0;
+		virtual float IsMouseButtonPressedImpl(int button) = 0;
 		virtual std::pair<float, float> GetMousePosImpl() = 0;
 		virtual float GetMouseXImpl() = 0;
 		virtual float GetMouseYImpl() = 0;
 	private:
-		static Input* s_instance;
+		static Scope<Input> s_instance;
 	};
 }

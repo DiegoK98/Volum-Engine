@@ -6,9 +6,9 @@
 
 namespace Volum
 {
-	Input* Input::s_instance = new WindowsInput();
+	Scope<Input> Input::s_instance = CreateScope<WindowsInput>();
 
-	bool WindowsInput::isKeyPressedImpl(int keycode)
+	bool WindowsInput::IsKeyPressedImpl(int keycode)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		auto state = glfwGetKey(window, keycode);
@@ -16,7 +16,7 @@ namespace Volum
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
-	float WindowsInput::isMouseButtonPressedImpl(int button)
+	float WindowsInput::IsMouseButtonPressedImpl(int button)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		auto state = glfwGetMouseButton(window, button);

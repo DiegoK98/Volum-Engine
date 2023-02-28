@@ -10,7 +10,7 @@ class TestLayer : public Volum::Layer
 {
 public:
 	TestLayer()
-		: Layer("Example"), m_cameraController(1280.0f / 720.0f)
+		: Layer("Example"), m_cameraController(1280.0f / 720.0f, true)
 	{
 		m_vertexArray = Volum::VertexArray::Create();
 
@@ -149,13 +149,13 @@ public:
 		m_cameraController.OnUpdate(ts);
 
 		// Triangle moving inputs
-		if (Volum::Input::isKeyPressed(VLM_KEY_LEFT))
+		if (Volum::Input::IsKeyPressed(VLM_KEY_LEFT))
 			m_trianglePosition.x -= m_triangleMoveSpeed * ts;
-		else if (Volum::Input::isKeyPressed(VLM_KEY_RIGHT))
+		else if (Volum::Input::IsKeyPressed(VLM_KEY_RIGHT))
 			m_trianglePosition.x += m_triangleMoveSpeed * ts;
-		else if (Volum::Input::isKeyPressed(VLM_KEY_UP))
+		else if (Volum::Input::IsKeyPressed(VLM_KEY_UP))
 			m_trianglePosition.y += m_triangleMoveSpeed * ts;
-		else if (Volum::Input::isKeyPressed(VLM_KEY_DOWN))
+		else if (Volum::Input::IsKeyPressed(VLM_KEY_DOWN))
 			m_trianglePosition.y -= m_triangleMoveSpeed * ts;
 
 		////// Render loop //////

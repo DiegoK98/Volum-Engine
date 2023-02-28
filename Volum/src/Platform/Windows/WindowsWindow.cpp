@@ -53,7 +53,7 @@ namespace Volum {
 
 		m_window = glfwCreateWindow((int)props.Width, (int)props.Height, m_data.Title.c_str(), nullptr, nullptr);
 		
-		m_context = new OpenGLContext(m_window);
+		m_context = CreateScope<OpenGLContext>(m_window);
 		m_context->Init();
 
 		glfwSetWindowUserPointer(m_window, &m_data);

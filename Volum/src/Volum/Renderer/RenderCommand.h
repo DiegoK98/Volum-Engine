@@ -32,6 +32,6 @@ namespace Volum
 			s_rendererAPI->DrawIndexed(vertexArray);
 		}
 	private:
-		static RendererAPI* s_rendererAPI;
+		static Scope<RendererAPI> s_rendererAPI;
 	};
 }

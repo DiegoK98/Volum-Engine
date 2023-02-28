@@ -15,22 +15,40 @@ namespace Volum
 	void OrthographicCameraController::OnUpdate(TimeStep ts)
 	{
 		// Move inputs
-		if (Input::isKeyPressed(VLM_KEY_A))
-			m_cameraPosition.x -= m_cameraTranslationSpeed * ts;
-		else if (Input::isKeyPressed(VLM_KEY_D))
-			m_cameraPosition.x += m_cameraTranslationSpeed * ts;
-		else if (Input::isKeyPressed(VLM_KEY_W))
-			m_cameraPosition.y += m_cameraTranslationSpeed * ts;
-		else if (Input::isKeyPressed(VLM_KEY_S))
-			m_cameraPosition.y -= m_cameraTranslationSpeed * ts;
+		if (Input::IsKeyPressed(VLM_KEY_A))
+		{
+			m_cameraPosition.x -= cos(glm::radians(m_cameraRotation)) * m_cameraTranslationSpeed * ts;
+			m_cameraPosition.y -= sin(glm::radians(m_cameraRotation)) * m_cameraTranslationSpeed * ts;
+		}
+		else if (Input::IsKeyPressed(VLM_KEY_D))
+		{
+			m_cameraPosition.x += cos(glm::radians(m_cameraRotation)) * m_cameraTranslationSpeed * ts;
+			m_cameraPosition.y += sin(glm::radians(m_cameraRotation)) * m_cameraTranslationSpeed * ts;
+		}
+
+		if (Input::IsKeyPressed(VLM_KEY_W))
+		{
+			m_cameraPosition.x += -sin(glm::radians(m_cameraRotation)) * m_cameraTranslationSpeed * ts;
+			m_cameraPosition.y += cos(glm::radians(m_cameraRotation)) * m_cameraTranslationSpeed * ts;
+		}
+		else if (Input::IsKeyPressed(VLM_KEY_S))
+		{
+			m_cameraPosition.x -= -sin(glm::radians(m_cameraRotation)) * m_cameraTranslationSpeed * ts;
+			m_cameraPosition.y -= cos(glm::radians(m_cameraRotation)) * m_cameraTranslationSpeed * ts;
+		}
 
 		// Rotation inputs
 		if (m_rotation)
 		{
-			if (Input::isKeyPressed(VLM_KEY_Q))
+			if (Input::IsKeyPressed(VLM_KEY_Q))
 				m_cameraRotation += m_cameraRotationSpeed * ts;
-			else if (Input::isKeyPressed(VLM_KEY_E))
+			else if (Input::IsKeyPressed(VLM_KEY_E))
 				m_cameraRotation -= m_cameraRotationSpeed * ts;
+
+			if (m_cameraRotation > 180.0f)
+				m_cameraRotation -= 360.0f;
+			else if (m_cameraRotation <= -180.0f)
+				m_cameraRotation += 360.0f;
 
 			m_camera.SetRotation(m_cameraRotation);
 		}

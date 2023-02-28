@@ -23,6 +23,6 @@ namespace Volum
 			glm::mat4 viewProjMat;
 		};
 
-		static SceneData* s_sceneData;
+		static Scope<SceneData> s_sceneData;
 	};
 }
