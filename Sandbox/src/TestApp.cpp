@@ -10,7 +10,7 @@ class TestLayer : public Volum::Layer
 {
 public:
 	TestLayer()
-		: Layer("Example"), m_camera(Volum::OrthographicCamera(-3.2f, 3.2f, -1.8f, 1.8f)), m_cameraPosition(0.0f), m_trianglePosition(0.0f)
+		: Layer("Example"), m_cameraController(1280.0f / 720.0f)
 	{
 		m_vertexArray = Volum::VertexArray::Create();
 
@@ -145,23 +145,8 @@ public:
 
 	void OnUpdate(Volum::TimeStep ts) override
 	{
-		VLM_TRACE("Delta time: {0}ms", ts.GetMiliseconds());
-
-		// Move inputs
-		if (Volum::Input::isKeyPressed(VLM_KEY_A))
-			m_cameraPosition.x -= m_cameraMoveSpeed * ts;
-		else if (Volum::Input::isKeyPressed(VLM_KEY_D))
-			m_cameraPosition.x += m_cameraMoveSpeed * ts;
-		else if (Volum::Input::isKeyPressed(VLM_KEY_W))
-			m_cameraPosition.y += m_cameraMoveSpeed * ts;
-		else if (Volum::Input::isKeyPressed(VLM_KEY_S))
-			m_cameraPosition.y -= m_cameraMoveSpeed * ts;
-
-		// Rotation inputs
-		if (Volum::Input::isKeyPressed(VLM_KEY_Q))
-			m_cameraRotation += m_cameraRotationSpeed * ts;
-		else if (Volum::Input::isKeyPressed(VLM_KEY_E))
-			m_cameraRotation -= m_cameraRotationSpeed * ts;
+		////// Update loop //////
+		m_cameraController.OnUpdate(ts);
 
 		// Triangle moving inputs
 		if (Volum::Input::isKeyPressed(VLM_KEY_LEFT))
@@ -173,14 +158,11 @@ public:
 		else if (Volum::Input::isKeyPressed(VLM_KEY_DOWN))
 			m_trianglePosition.y -= m_triangleMoveSpeed * ts;
 
-		// Renderer
+		////// Render loop //////
 		Volum::RenderCommand::SetClearColor({ 1.0f, 0.0f, 1.0f, 1.0f });
 		Volum::RenderCommand::Clear();
 
-		m_camera.SetPosition(m_cameraPosition);
-		m_camera.SetRotation(m_cameraRotation);
-
-		Volum::Renderer::BeginScene(m_camera);
+		Volum::Renderer::BeginScene(m_cameraController.GetCamera());
 
 		glm::mat4 triangleTransform = glm::translate(glm::mat4(1.0f), m_trianglePosition);
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
@@ -223,6 +205,7 @@ public:
 
 	void OnEvent(Volum::Event& event) override
 	{
+		m_cameraController.OnEvent(event);
 	}
 
 private:
@@ -236,13 +219,9 @@ private:
 	Volum::Ref<Volum::Texture2D> m_texture;
 	Volum::Ref<Volum::Texture2D> m_textureLeaves;
 
-	Volum::OrthographicCamera m_camera;
-	glm::vec3 m_cameraPosition;
-	float m_cameraRotation = 0.0f;
-	float m_cameraMoveSpeed = 3.0f;
-	float m_cameraRotationSpeed = 90.0f;
+	Volum::OrthographicCameraController m_cameraController;
 
-	glm::vec3 m_trianglePosition;
+	glm::vec3 m_trianglePosition = { 0.0f, 0.0f, 0.0f };
 	float m_triangleMoveSpeed = 1.0f;
 
 	glm::vec3 m_squareColor = { 0.3f, 0.2f, 0.8f };
