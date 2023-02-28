@@ -2,16 +2,16 @@
 
 // For use by Volum applications
 
-#include "Volum/Application.h"
-#include "Volum/Layer.h"
-#include "Volum/Log.h"
+#include "Volum/Core/Application.h"
+#include "Volum/Core/Layer.h"
+#include "Volum/Core/Log.h"
 
 #include "Volum/Core/TimeStep.h"
 
-#include "Volum/Input.h"
-#include "Volum/MouseButtonCodes.h"
-#include "Volum/KeyCodes.h"
-#include "Volum/OrthographicCameraController.h"
+#include "Volum/Core/Input.h"
+#include "Volum/Core/MouseButtonCodes.h"
+#include "Volum/Core/KeyCodes.h"
+#include "Volum/Renderer/OrthographicCameraController.h"
 
 #include "Volum/ImGui/ImGuiLayer.h"
 
@@ -28,5 +28,5 @@
 // -----------------------------
 
 // ---------Entry Point---------
-#include "Volum/EntryPoint.h"
+#include "Volum/Core/EntryPoint.h"
 // -----------------------------

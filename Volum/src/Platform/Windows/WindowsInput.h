@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Volum/Input.h"
+#include "Volum/Core/Input.h"
 
 namespace Volum
 {

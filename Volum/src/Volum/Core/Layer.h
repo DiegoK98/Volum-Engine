@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Core.h"
-#include "Events/Event.h"
-#include "Core/TimeStep.h"
+#include "Volum/Core/Core.h"
+#include "Volum/Events/Event.h"
+#include "Volum/Core/TimeStep.h"
 
 namespace Volum {
 

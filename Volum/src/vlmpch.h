@@ -13,7 +13,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "Volum/Log.h"
+#include "Volum/Core/Log.h"
 
 #ifdef VLM_PLATFORM_WINDOWS
 	#include <Windows.h>

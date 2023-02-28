@@ -1,8 +1,8 @@
 #include "vlmpch.h"
 
 #include "OrthographicCameraController.h"
-#include "Input.h"
-#include "KeyCodes.h"
+#include "Volum/Core/Input.h"
+#include "Volum/Core/KeyCodes.h"
 
 namespace Volum
 {

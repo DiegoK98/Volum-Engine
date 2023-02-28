@@ -2,8 +2,8 @@
 
 #include "vlmpch.h"
 
-#include "Core.h"
-#include "Events/Event.h"
+#include "Volum/Core/Core.h"
+#include "Volum/Events/Event.h"
 
 namespace Volum {
 

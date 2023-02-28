@@ -243,7 +243,7 @@ public:
 
 Volum::Application* Volum::CreateApplication()
 {
-	VLM_WARN("This is an example");
+	VLM_WARN("Created Test application");
 
 	return new Test();
 }
