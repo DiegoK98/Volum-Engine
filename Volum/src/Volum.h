@@ -26,7 +26,3 @@
 
 #include "Volum/Renderer/OrthographicCamera.h"
 // -----------------------------
-
-// ---------Entry Point---------
-#include "Volum/Core/EntryPoint.h"
-// -----------------------------

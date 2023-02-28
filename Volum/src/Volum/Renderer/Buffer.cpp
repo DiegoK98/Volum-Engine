@@ -15,7 +15,7 @@ namespace Volum
 			VLM_CORE_ASSERT(false, "RendererAPI::None is not supported!");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return std::make_shared<OpenGLVertexBuffer>(vertices, size);
+			return CreateRef<OpenGLVertexBuffer>(vertices, size);
 		}
 
 		VLM_CORE_ASSERT(false, "Unknown RendererAPI!");
@@ -30,7 +30,7 @@ namespace Volum
 			VLM_CORE_ASSERT(false, "RendererAPI::None is not supported!");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return std::make_shared<OpenGLIndexBuffer>(vertices, count);
+			return CreateRef<OpenGLIndexBuffer>(vertices, count);
 		}
 
 		VLM_CORE_ASSERT(false, "Unknown RendererAPI!");

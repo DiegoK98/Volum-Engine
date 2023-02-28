@@ -1,10 +1,13 @@
 #include <Volum.h>
+#include <Volum/Core/EntryPoint.h>
 
 #include "Platform/OpenGL/OpenGLShader.h"
 
 #include <ImGui/imgui.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include "Test2D.h"
 
 class TestLayer : public Volum::Layer
 {
@@ -197,9 +200,7 @@ public:
 	void OnImGuiRender() override
 	{
 		ImGui::Begin("Settings");
-		
 		ImGui::ColorEdit3("Square color", glm::value_ptr(m_squareColor));
-		
 		ImGui::End();
 	}
 
@@ -232,7 +233,8 @@ class Test : public Volum::Application
 public:
 	Test()
 	{
-		PushLayer(new TestLayer());
+		//PushLayer(new TestLayer());
+		PushLayer(new Test2D());
 	}
 
 	~Test()
