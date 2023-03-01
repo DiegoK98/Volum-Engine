@@ -12,35 +12,7 @@ Test2D::Test2D()
 
 void Test2D::OnAttach()
 {
-	//////// Blue Square
-	m_squareVA = Volum::VertexArray::Create();
 
-	float squareVertices[4 * 3] = {
-		-0.75f, -0.75f, 0.0f,
-		 0.75f, -0.75f, 0.0f,
-		 0.75f,  0.75f, 0.0f,
-		-0.75f,  0.75f, 0.0f,
-	};
-
-	Volum::Ref<Volum::VertexBuffer> squareVB;
-	squareVB = Volum::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
-
-	squareVB->SetLayout({
-		{ Volum::ShaderDataType::Float3, "a_position" },
-		});
-
-	m_squareVA->AddVertexBuffer(squareVB);
-
-	uint32_t squareIndices[6] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-
-	Volum::Ref<Volum::IndexBuffer> squareIB;
-	squareIB = Volum::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
-	m_squareVA->SetIndexBuffer(squareIB);
-
-	m_flatColorShader = Volum::Shader::Create("assets/shaders/FlatColor.glsl");
 }
 
 void Test2D::OnDetach()
@@ -57,14 +29,15 @@ void Test2D::OnUpdate(Volum::TimeStep ts)
 	Volum::RenderCommand::SetClearColor({ 1.0f, 0.0f, 1.0f, 1.0f });
 	Volum::RenderCommand::Clear();
 
-	Volum::Renderer::BeginScene(m_cameraController.GetCamera());
+	Volum::Renderer2D::BeginScene(m_cameraController.GetCamera());
 
-	m_flatColorShader->Bind();
-	m_flatColorShader->UploadUniformFloat4("u_color", m_squareColor);
+	//m_flatColorShader->Bind();
+	//m_flatColorShader->UploadUniformFloat4("u_color", m_squareColor);
+	//Volum::Renderer::Submit(m_flatColorShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
-	Volum::Renderer::Submit(m_flatColorShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+	Volum::Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
 
-	Volum::Renderer::EndScene();
+	Volum::Renderer2D::EndScene();
 }
 
 void Test2D::OnImGuiRender()

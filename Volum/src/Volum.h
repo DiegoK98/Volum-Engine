@@ -17,6 +17,7 @@
 
 // ---------Renderer---------
 #include "Volum/Renderer/Renderer.h"
+#include "Volum/Renderer/Renderer2D.h"
 #include "Volum/Renderer/RenderCommand.h"
 
 #include "Volum/Renderer/Buffer.h"

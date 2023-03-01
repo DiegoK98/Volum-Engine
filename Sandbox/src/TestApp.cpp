@@ -27,7 +27,7 @@ public:
 		triangleVB->SetLayout({
 			{ Volum::ShaderDataType::Float3, "a_position" },
 			{ Volum::ShaderDataType::Float4, "a_color" }
-			});
+		});
 
 		m_vertexArray->AddVertexBuffer(triangleVB);
 
@@ -88,7 +88,7 @@ public:
 		squareVB->SetLayout({
 			{ Volum::ShaderDataType::Float3, "a_position" },
 			{ Volum::ShaderDataType::Float2, "a_texCoords" },
-			});
+		});
 
 		m_squareVA->AddVertexBuffer(squareVB);
 

@@ -9,7 +9,7 @@
 
 namespace Volum {
 
-	static bool s_GLFWInitialized = false;
+	static uint8_t s_GLFWWindowCount = 0;
 
 	static void GLFWErrorCallback(int error, const char* description)
 	{
@@ -40,19 +40,18 @@ namespace Volum {
 		VLM_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
 
-		if (!s_GLFWInitialized)
+		if (s_GLFWWindowCount == 0)
 		{
-			// TODO: glfwTerminate on system shutdown
+			VLM_CORE_INFO("Initializing GLFW");
 			int success = glfwInit();
 			VLM_CORE_ASSERT(success, "Could not intialize GLFW!");
 
 			glfwSetErrorCallback(GLFWErrorCallback);
-
-			s_GLFWInitialized = true;
 		}
 
 		m_window = glfwCreateWindow((int)props.Width, (int)props.Height, m_data.Title.c_str(), nullptr, nullptr);
-		
+		++s_GLFWWindowCount;
+
 		m_context = CreateScope<OpenGLContext>(m_window);
 		m_context->Init();
 
@@ -155,6 +154,12 @@ namespace Volum {
 	void WindowsWindow::Shutdown()
 	{
 		glfwDestroyWindow(m_window);
+
+		if (--s_GLFWWindowCount == 0)
+		{
+			VLM_CORE_INFO("Terminating GLFW");
+			glfwTerminate();
+		}
 	}
 
 	void WindowsWindow::OnUpdate()
