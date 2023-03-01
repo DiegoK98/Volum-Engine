@@ -21,5 +21,7 @@ private:
 	Volum::Ref<Volum::VertexArray> m_squareVA;
 	Volum::Ref<Volum::Shader> m_flatColorShader;
 
+	Volum::Ref<Volum::Texture2D> m_checkerboardTexture;
+
 	glm::vec4 m_squareColor = { 0.3f, 0.2f, 0.8f, 1.0f };
 };

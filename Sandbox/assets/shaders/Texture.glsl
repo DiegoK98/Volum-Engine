@@ -20,12 +20,12 @@ void main()
 
 in vec2 v_texCoords;
 
-uniform sampler2D u_albedoTex;
+uniform sampler2D u_texture;
 
 out vec4 color;
 
 void main()
 {
-	color = texture(u_albedoTex, v_texCoords);
+	color = texture(u_texture, v_texCoords);
 	//color = vec4(v_texCoords, 0.0, 1.0);
 }

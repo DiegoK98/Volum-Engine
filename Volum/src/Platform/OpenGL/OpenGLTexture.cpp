@@ -39,8 +39,9 @@ namespace Volum
 
 		glTexParameteri(m_rendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(m_rendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		/*glTexParameteri(m_rendererID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(m_rendererID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);*/
+
+		glTexParameteri(m_rendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(m_rendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 		glTextureSubImage2D(m_rendererID, 0, 0, 0, m_width, m_height, dataFormat, GL_UNSIGNED_BYTE, data);
 

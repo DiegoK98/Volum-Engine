@@ -12,7 +12,7 @@ Test2D::Test2D()
 
 void Test2D::OnAttach()
 {
-
+	m_checkerboardTexture = Volum::Texture2D::Create("assets/textures/checkerboard.png");
 }
 
 void Test2D::OnDetach()
@@ -35,7 +35,10 @@ void Test2D::OnUpdate(Volum::TimeStep ts)
 	//m_flatColorShader->UploadUniformFloat4("u_color", m_squareColor);
 	//Volum::Renderer::Submit(m_flatColorShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
-	Volum::Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+	Volum::Renderer2D::DrawQuad({ 1.5f, -1.0f, -0.2f }, { 1.0f, 1.0f }, m_checkerboardTexture);
+	Volum::Renderer2D::DrawQuad({ -1.0f, 1.0f }, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+	Volum::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, m_checkerboardTexture);
+	Volum::Renderer2D::DrawQuad({ 1.0f, -1.0f }, { 2.0f, 0.3f }, { 0.2f, 0.6f, 0.1f, 0.6f });
 
 	Volum::Renderer2D::EndScene();
 }
