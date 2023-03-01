@@ -26,7 +26,7 @@ void Test2D::OnUpdate(Volum::TimeStep ts)
 	m_cameraController.OnUpdate(ts);
 
 	// Render
-	Volum::RenderCommand::SetClearColor({ 1.0f, 0.0f, 1.0f, 1.0f });
+	Volum::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 	Volum::RenderCommand::Clear();
 
 	Volum::Renderer2D::BeginScene(m_cameraController.GetCamera());
