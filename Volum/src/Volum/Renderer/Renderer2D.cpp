@@ -60,7 +60,7 @@ namespace Volum
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
 		s_data->FlatColorShader->Bind();
-		s_data->FlatColorShader->UploadUniformMat4("u_viewProjMat", camera.GetViewProjectionMatrix());
+		s_data->FlatColorShader->SetMat4("u_viewProjMat", camera.GetViewProjectionMatrix());
 	}
 
 	void Renderer2D::EndScene()
@@ -76,12 +76,12 @@ namespace Volum
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		s_data->FlatColorShader->Bind();
-		s_data->FlatColorShader->UploadUniformFloat4("u_color", color);
+		s_data->FlatColorShader->SetFloat4("u_color", color);
 
 		glm::mat4 translation = glm::translate(glm::mat4(1.0f), position);
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
 
-		s_data->FlatColorShader->UploadUniformMat4("u_modelMat", translation * scale);
+		s_data->FlatColorShader->SetMat4("u_modelMat", translation * scale);
 
 		s_data->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_data->QuadVertexArray);
