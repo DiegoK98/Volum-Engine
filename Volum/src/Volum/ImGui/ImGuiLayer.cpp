@@ -1,4 +1,5 @@
 #include "vlmpch.h"
+
 #include "ImGuiLayer.h"
 
 #include "Volum/Core/Application.h"
@@ -80,12 +81,6 @@ namespace Volum
 			ImGui::RenderPlatformWindowsDefault();
 			glfwMakeContextCurrent(backup_current_context);
 		}
-	}
-
-	void ImGuiLayer::OnImGuiRender()
-	{
-		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
 	}
 
 	void ImGuiLayer::SetDarkThemeColors()

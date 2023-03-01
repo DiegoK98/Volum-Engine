@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core.h"
-#include "Layer.h"
+#include "Volum/Core/Core.h"
+#include "Volum/Core/Layer.h"
 
 #include <vector>
 
@@ -10,7 +10,7 @@ namespace Volum {
 	class LayerStack
 	{
 	public:
-		LayerStack();
+		LayerStack() = default;
 		~LayerStack();
 
 		void PushLayer(Layer* layer);

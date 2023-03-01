@@ -2,9 +2,9 @@
 
 #include "Renderer2D.h"
 
-#include "RenderCommand.h"
-#include "VertexArray.h"
-#include "Shader.h"
+#include "Volum/Renderer/RenderCommand.h"
+#include "Volum/Renderer/VertexArray.h"
+#include "Volum/Renderer/Shader.h"
 
 #include <glm/ext/matrix_transform.hpp>
 
@@ -32,8 +32,7 @@ namespace Volum
 			-0.75f,  0.75f, 0.0f,		0.0f, 1.0f,
 		};
 
-		Ref<VertexBuffer> squareVB;
-		squareVB = VertexBuffer::Create(squareVertices, sizeof(squareVertices));
+		Ref<VertexBuffer> squareVB = VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 
 		squareVB->SetLayout({
 			{ ShaderDataType::Float3, "a_position" },
@@ -47,8 +46,7 @@ namespace Volum
 			2, 3, 0
 		};
 
-		Ref<IndexBuffer> squareIB;
-		squareIB = IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
+		Ref<IndexBuffer> squareIB = IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 		s_data->QuadVertexArray->SetIndexBuffer(squareIB);
 
 		s_data->WhiteTexture = Texture2D::Create(1, 1);
@@ -56,6 +54,7 @@ namespace Volum
 		s_data->WhiteTexture->SetData(&whiteTexData, sizeof(uint32_t));
 
 		s_data->TextureShader = Shader::Create("assets/shaders/Texture.glsl");
+		s_data->TextureShader->SetInt("u_texture", 0);
 	}
 
 	void Renderer2D::Shutdown()
@@ -67,7 +66,6 @@ namespace Volum
 	{
 		s_data->TextureShader->Bind();
 		s_data->TextureShader->SetMat4("u_viewProjMat", camera.GetViewProjectionMatrix());
-		s_data->TextureShader->SetInt("u_texture", 0);
 	}
 
 	void Renderer2D::EndScene()

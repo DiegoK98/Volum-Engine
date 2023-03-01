@@ -1,4 +1,5 @@
 #include "vlmpch.h"
+
 #include "WindowsWindow.h"
 
 #include "Volum/Events/KeyEvent.h"
@@ -16,9 +17,9 @@ namespace Volum {
 		VLM_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
-	Window* Window::Create(const WindowProps& props)
+	Scope<Window> Window::Create(const WindowProps& props)
 	{
-		return new WindowsWindow(props);
+		return CreateScope<WindowsWindow>(props);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
@@ -52,7 +53,7 @@ namespace Volum {
 		m_window = glfwCreateWindow((int)props.Width, (int)props.Height, m_data.Title.c_str(), nullptr, nullptr);
 		++s_GLFWWindowCount;
 
-		m_context = CreateScope<OpenGLContext>(m_window);
+		m_context = GraphicsContext::Create(m_window);
 		m_context->Init();
 
 		glfwSetWindowUserPointer(m_window, &m_data);

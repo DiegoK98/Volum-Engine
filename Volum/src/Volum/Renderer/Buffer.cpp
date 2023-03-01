@@ -2,7 +2,7 @@
 
 #include "Buffer.h"
 
-#include "Renderer.h"
+#include "Volum/Renderer/Renderer.h"
 #include "Platform/OpenGL/OpenGLBuffer.h"
 
 namespace Volum
@@ -11,11 +11,11 @@ namespace Volum
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None:
-			VLM_CORE_ASSERT(false, "RendererAPI::None is not supported!");
-			return nullptr;
-		case RendererAPI::API::OpenGL:
-			return CreateRef<OpenGLVertexBuffer>(vertices, size);
+			case RendererAPI::API::None:
+				VLM_CORE_ASSERT(false, "RendererAPI::None is not supported!");
+				return nullptr;
+			case RendererAPI::API::OpenGL:
+				return CreateRef<OpenGLVertexBuffer>(vertices, size);
 		}
 
 		VLM_CORE_ASSERT(false, "Unknown RendererAPI!");
@@ -26,11 +26,11 @@ namespace Volum
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None:
-			VLM_CORE_ASSERT(false, "RendererAPI::None is not supported!");
-			return nullptr;
-		case RendererAPI::API::OpenGL:
-			return CreateRef<OpenGLIndexBuffer>(vertices, count);
+			case RendererAPI::API::None:
+				VLM_CORE_ASSERT(false, "RendererAPI::None is not supported!");
+				return nullptr;
+			case RendererAPI::API::OpenGL:
+				return CreateRef<OpenGLIndexBuffer>(vertices, count);
 		}
 
 		VLM_CORE_ASSERT(false, "Unknown RendererAPI!");

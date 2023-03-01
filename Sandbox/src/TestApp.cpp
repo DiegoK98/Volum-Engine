@@ -21,8 +21,7 @@ public:
 			 0.0f,  0.477f, 0.0f,		0.6f, 0.1f, 0.6f, 1.0f,
 		};
 
-		Volum::Ref<Volum::VertexBuffer> triangleVB;
-		triangleVB = Volum::VertexBuffer::Create(vertices, sizeof(vertices));
+		Volum::Ref<Volum::VertexBuffer> triangleVB = Volum::VertexBuffer::Create(vertices, sizeof(vertices));
 
 		triangleVB->SetLayout({
 			{ Volum::ShaderDataType::Float3, "a_position" },
@@ -35,8 +34,7 @@ public:
 			0, 1, 2
 		};
 
-		Volum::Ref<Volum::IndexBuffer> triangleIB;
-		triangleIB = Volum::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
+		Volum::Ref<Volum::IndexBuffer> triangleIB = Volum::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_vertexArray->SetIndexBuffer(triangleIB);
 
 		std::string vertexSrc = R"(
@@ -82,8 +80,7 @@ public:
 		};
 
 		m_squareVA = m_squareVA->Create();
-		Volum::Ref<Volum::VertexBuffer> squareVB;
-		squareVB = Volum::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
+		Volum::Ref<Volum::VertexBuffer> squareVB = Volum::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 
 		squareVB->SetLayout({
 			{ Volum::ShaderDataType::Float3, "a_position" },
@@ -97,8 +94,7 @@ public:
 			2, 3, 0
 		};
 
-		Volum::Ref<Volum::IndexBuffer> squareIB;
-		squareIB = Volum::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
+		Volum::Ref<Volum::IndexBuffer> squareIB = Volum::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 		m_squareVA->SetIndexBuffer(squareIB);
 
 		std::string vertexSrcFlatColor = R"(

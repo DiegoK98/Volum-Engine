@@ -1,7 +1,7 @@
 #pragma once
 
-#include "OrthographicCamera.h"
-#include "Texture.h"
+#include "Volum/Renderer/OrthographicCamera.h"
+#include "Volum/Renderer/Texture.h"
 
 namespace Volum
 {

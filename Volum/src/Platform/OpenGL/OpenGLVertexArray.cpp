@@ -1,4 +1,5 @@
 #include "vlmpch.h"
+
 #include "OpenGLVertexArray.h"
 
 #include <glad/gl.h>

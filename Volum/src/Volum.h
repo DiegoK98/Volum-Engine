@@ -2,6 +2,8 @@
 
 // For use by Volum applications
 
+#include "Volum/Core/Core.h"
+
 #include "Volum/Core/Application.h"
 #include "Volum/Core/Layer.h"
 #include "Volum/Core/Log.h"

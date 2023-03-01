@@ -39,10 +39,6 @@
 	#error "Unknown platform!"
 #endif
 
-#ifndef VLM_PLATFORM_WINDOWS
-	#error Only Windows is supported!
-#endif
-
 #ifdef VLM_DEBUG
 	#define VLM_ENABLE_ASSERTS
 #endif

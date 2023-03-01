@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Volum/Renderer/GraphicsContext.h"
 
 // Forw decl

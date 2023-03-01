@@ -14,7 +14,7 @@ namespace Volum
 	{
 	public:
 		Application();
-		virtual ~Application() = default;
+		virtual ~Application();
 
 		void Run();
 
@@ -30,7 +30,7 @@ namespace Volum
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 		
-		std::unique_ptr<Window> m_window;
+		Scope<Window> m_window;
 		ImGuiLayer* m_imGuiLayer;
 		bool m_running = true;
 		bool m_minimized = false;

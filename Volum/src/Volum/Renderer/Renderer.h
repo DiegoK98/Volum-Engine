@@ -1,8 +1,8 @@
 #pragma once
 
-#include "RenderCommand.h"
-#include "OrthographicCamera.h"
-#include "Shader.h"
+#include "Volum/Renderer/RenderCommand.h"
+#include "Volum/Renderer/OrthographicCamera.h"
+#include "Volum/Renderer/Shader.h"
 
 namespace Volum
 {
@@ -10,6 +10,7 @@ namespace Volum
 	{
 	public:
 		static void Init();
+		static void Shutdown();
 		static void OnWindowResize(uint32_t width, uint32_t height);
 
 		static void BeginScene(OrthographicCamera& camera);

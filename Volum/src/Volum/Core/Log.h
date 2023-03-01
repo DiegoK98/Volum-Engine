@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Core.h"
+#include "Volum/Core/Core.h"
+
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
 
@@ -11,11 +12,11 @@ namespace Volum
 	public:
 		static void Init();
 
-		inline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return s_coreLogger; }
-		inline static std::shared_ptr<spdlog::logger>& GetClientLogger() { return s_clientLogger; }
+		inline static Ref<spdlog::logger>& GetCoreLogger() { return s_coreLogger; }
+		inline static Ref<spdlog::logger>& GetClientLogger() { return s_clientLogger; }
 	private:
-		static std::shared_ptr<spdlog::logger> s_coreLogger;
-		static std::shared_ptr<spdlog::logger> s_clientLogger;
+		static Ref<spdlog::logger> s_coreLogger;
+		static Ref<spdlog::logger> s_clientLogger;
 	};
 }
 

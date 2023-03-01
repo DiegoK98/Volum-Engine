@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Volum/Core/Core.h"
+
 #ifdef VLM_PLATFORM_WINDOWS
 
 //extern Volum::Application* Volum::CreateApplication();

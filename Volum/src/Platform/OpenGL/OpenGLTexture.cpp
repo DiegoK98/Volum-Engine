@@ -3,7 +3,6 @@
 #include "OpenGLTexture.h"
 
 #include <glad/gl.h>
-
 #include <stb_image.h>
 
 namespace Volum

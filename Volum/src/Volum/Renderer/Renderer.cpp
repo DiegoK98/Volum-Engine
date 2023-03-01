@@ -2,8 +2,7 @@
 
 #include "Renderer.h"
 
-#include "Renderer2D.h"
-#include "RenderCommand.h"
+#include "Volum/Renderer/Renderer2D.h"
 
 namespace Volum
 {
@@ -13,6 +12,11 @@ namespace Volum
 	{
 		RenderCommand::Init();
 		Renderer2D::Init();
+	}
+
+	void Renderer::Shutdown()
+	{
+		Renderer2D::Shutdown();
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)

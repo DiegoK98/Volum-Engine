@@ -15,13 +15,18 @@ namespace Volum
 		VLM_CORE_ASSERT(!s_instance, "Application already exists!");
 		s_instance = this;
 
-		m_window = std::unique_ptr<Window>(Window::Create());
+		m_window = Window::Create();
 		m_window->SetEventCallback(VLM_BIND_EVENT_FN(Application::OnEvent));
 
 		Renderer::Init();
 
 		m_imGuiLayer = new ImGuiLayer();
 		PushOverlay(m_imGuiLayer);
+	}
+
+	Application::~Application()
+	{
+		Renderer::Shutdown();
 	}
 
 	void Application::Run()

@@ -2,7 +2,7 @@
 
 #include "VertexArray.h"
 
-#include "Renderer.h"
+#include "Volum/Renderer/Renderer.h"
 #include "Platform/OpenGL/OpenGLVertexArray.h"
 
 namespace Volum

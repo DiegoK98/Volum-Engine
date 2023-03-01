@@ -2,7 +2,7 @@
 
 #include "Texture.h"
 
-#include "Renderer.h"
+#include "Volum/Renderer/Renderer.h"
 #include "Platform/OpenGL/OpenGLTexture.h"
 
 namespace Volum
