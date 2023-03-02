@@ -8,6 +8,8 @@
 #include "Volum/ImGui/ImGuiLayer.h"
 #include "Volum/Core/TimeStep.h"
 
+int main(int argc, char** argv);
+
 namespace Volum
 {
 	class Application
@@ -15,8 +17,6 @@ namespace Volum
 	public:
 		Application();
 		virtual ~Application();
-
-		void Run();
 
 		void OnEvent(Event& e);
 
@@ -27,6 +27,8 @@ namespace Volum
 
 		inline static Application& Get() { return *s_instance; }
 	private:
+		void Run();
+
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 		
@@ -38,6 +40,7 @@ namespace Volum
 		float m_lastFrameTime = 0.0f;
 
 		static Application* s_instance;
+		friend int ::main(int argc, char** argv);
 	};
 
 	// To be defined in a client
