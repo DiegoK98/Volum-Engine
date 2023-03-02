@@ -11,7 +11,7 @@
 #include "Volum/Core/TimeStep.h"
 
 #include "Volum/Core/Input.h"
-#include "Volum/Core/MouseButtonCodes.h"
+#include "Volum/Core/MouseCodes.h"
 #include "Volum/Core/KeyCodes.h"
 #include "Volum/Renderer/OrthographicCameraController.h"
 
