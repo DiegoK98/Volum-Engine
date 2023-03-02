@@ -11,3 +11,4 @@ bin-int/
 
 # Other files and folders
 **/profiler/
+*.log
