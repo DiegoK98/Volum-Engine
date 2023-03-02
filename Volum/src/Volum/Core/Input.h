@@ -18,6 +18,7 @@ namespace Volum
 		inline static float IsMouseButtonPressed(MouseCode button) { return s_instance->IsMouseButtonPressedImpl(button); }
 		inline static std::pair<float, float> GetMousePos() { return s_instance->GetMousePosImpl(); }
 
+		static Scope<Input> Create();
 	protected:
 		virtual bool IsKeyPressedImpl(KeyCode key) = 0;
 		virtual float IsMouseButtonPressedImpl(MouseCode button) = 0;
