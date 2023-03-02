@@ -22,6 +22,9 @@ private:
 	Volum::Ref<Volum::Shader> m_flatColorShader;
 
 	Volum::Ref<Volum::Texture2D> m_checkerboardTexture;
+	Volum::Ref<Volum::Texture2D> m_leavesTexture;
 
 	glm::vec4 m_squareColor = { 0.3f, 0.2f, 0.8f, 1.0f };
+	glm::vec4 m_checkerboardTintColor = { 0.8f, 0.2f, 0.3f, 1.0f };
+	float m_tilingFactor = 1.0f;
 };

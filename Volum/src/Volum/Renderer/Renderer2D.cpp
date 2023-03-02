@@ -91,6 +91,7 @@ namespace Volum
 
 		//s_data->TextureShader->Bind(); // Single shader, so it's already bound
 		s_data->TextureShader->SetFloat4("u_color", color);
+		s_data->TextureShader->SetFloat("u_tilingFactor", 1.0f);
 		s_data->WhiteTexture->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
@@ -100,17 +101,18 @@ namespace Volum
 		RenderCommand::DrawIndexed(s_data->QuadVertexArray);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, glm::vec4 tintColor)
 	{
-		DrawQuad(glm::vec3(position, 0.0f), size, texture);
+		DrawQuad(glm::vec3(position, 0.0f), size, texture, tilingFactor, tintColor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, glm::vec4 tintColor)
 	{
 		VLM_PROFILE_FUNCTION();
 
 		//s_data->TextureShader->Bind(); // Single shader, so it's already bound
-		s_data->TextureShader->SetFloat4("u_color", glm::vec4(1.0f));
+		s_data->TextureShader->SetFloat4("u_color", tintColor);
+		s_data->TextureShader->SetFloat("u_tilingFactor", tilingFactor);
 		texture->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
@@ -119,4 +121,51 @@ namespace Volum
 		s_data->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_data->QuadVertexArray);
 	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const float rotation, const glm::vec2& size, const glm::vec4& color)
+	{
+		DrawRotatedQuad(glm::vec3(position, 0.0f), rotation, size, color);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const float rotation, const glm::vec2& size, const glm::vec4& color)
+	{
+		VLM_PROFILE_FUNCTION();
+
+		//s_data->TextureShader->Bind(); // Single shader, so it's already bound
+		s_data->TextureShader->SetFloat4("u_color", color);
+		s_data->TextureShader->SetFloat("u_tilingFactor", 1.0f);
+		s_data->WhiteTexture->Bind();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f, 0.0f, 1.0f))
+			* glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
+		s_data->TextureShader->SetMat4("u_modelMat", transform);
+
+		s_data->QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_data->QuadVertexArray);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const float rotation, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, glm::vec4 tintColor)
+	{
+		DrawRotatedQuad(glm::vec3(position, 0.0f), rotation, size, texture, tilingFactor, tintColor);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const float rotation, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, glm::vec4 tintColor)
+	{
+		VLM_PROFILE_FUNCTION();
+
+		//s_data->TextureShader->Bind(); // Single shader, so it's already bound
+		s_data->TextureShader->SetFloat4("u_color", tintColor);
+		s_data->TextureShader->SetFloat("u_tilingFactor", tilingFactor);
+		texture->Bind();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) 
+			* glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f, 0.0f, 1.0f))
+			* glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
+		s_data->TextureShader->SetMat4("u_modelMat", transform);
+
+		s_data->QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_data->QuadVertexArray);
+	}
+
 }
