@@ -15,6 +15,8 @@
 
 #include "Volum/Core/Log.h"
 
+#include "Volum/Debug/Instrumentor.h"
+
 #ifdef VLM_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif

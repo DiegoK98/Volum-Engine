@@ -21,6 +21,8 @@ namespace Volum
 
 	void Renderer2D::Init()
 	{
+		VLM_PROFILE_FUNCTION();
+
 		s_data = new Renderer2DStorage();
 
 		s_data->QuadVertexArray = VertexArray::Create();
@@ -59,18 +61,22 @@ namespace Volum
 
 	void Renderer2D::Shutdown()
 	{
+		VLM_PROFILE_FUNCTION();
+
 		delete s_data;
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
+		VLM_PROFILE_FUNCTION();
+
 		s_data->TextureShader->Bind();
 		s_data->TextureShader->SetMat4("u_viewProjMat", camera.GetViewProjectionMatrix());
 	}
 
 	void Renderer2D::EndScene()
 	{
-
+		VLM_PROFILE_FUNCTION();
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
@@ -80,7 +86,9 @@ namespace Volum
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
-		//s_data->TextureShader->Bind();
+		VLM_PROFILE_FUNCTION();
+
+		//s_data->TextureShader->Bind(); // Single shader, so it's already bound
 		s_data->TextureShader->SetFloat4("u_color", color);
 		s_data->WhiteTexture->Bind();
 
@@ -98,7 +106,9 @@ namespace Volum
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture)
 	{
-		//s_data->TextureShader->Bind();
+		VLM_PROFILE_FUNCTION();
+
+		//s_data->TextureShader->Bind(); // Single shader, so it's already bound
 		s_data->TextureShader->SetFloat4("u_color", glm::vec4(1.0f));
 		texture->Bind();
 

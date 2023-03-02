@@ -15,6 +15,8 @@ namespace Volum
 
 	void OpenGLContext::Init()
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		glfwMakeContextCurrent(m_windowHandle);
 		int status = gladLoadGL((GLADloadfunc)glfwGetProcAddress);
 		VLM_CORE_ASSERT(status, "Failed to initialize Glad!");
@@ -36,6 +38,8 @@ namespace Volum
 
 	void OpenGLContext::SwapBuffers()
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		glfwSwapBuffers(m_windowHandle);
 	}
 }

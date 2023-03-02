@@ -21,6 +21,8 @@ namespace Volum
 
 	OpenGLShader::OpenGLShader(const std::string& filepath)
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		std::string source = ReadFile(filepath);
 		auto shaderSources = PreProcess(source);
 		Compile(shaderSources);
@@ -37,6 +39,8 @@ namespace Volum
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 		: m_name(name)
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		std::unordered_map<GLenum, std::string> sources;
 
 		sources[GL_VERTEX_SHADER] = vertexSrc;
@@ -46,11 +50,15 @@ namespace Volum
 
 	OpenGLShader::~OpenGLShader()
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		glDeleteProgram(m_rendererID);
 	}
 
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		std::string result;
 		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 
@@ -80,6 +88,8 @@ namespace Volum
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		std::unordered_map<GLenum, std::string> shaderSources;
 
 		const char* typeToken = "#type";
@@ -105,6 +115,8 @@ namespace Volum
 
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		// Create program and shaders
 		GLuint program = glCreateProgram();
 		VLM_CORE_ASSERT(shaderSources.size() <= VLM_MAX_SHADERS, "Surpassed max number of shaders in a program!");
@@ -180,11 +192,15 @@ namespace Volum
 
 	void OpenGLShader::Bind() const
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		glUseProgram(m_rendererID);
 	}
 
 	void OpenGLShader::Unbind() const
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		glUseProgram(0);
 	}
 
@@ -192,36 +208,50 @@ namespace Volum
 
 	void OpenGLShader::SetInt(const std::string& name, const int value)
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		UploadUniformInt(name, value);
 	}
 
 	void OpenGLShader::SetFloat(const std::string& name, const float value)
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		UploadUniformFloat(name, value);
 	}
 
 	void OpenGLShader::SetFloat2(const std::string& name, const glm::vec2& values)
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		UploadUniformFloat2(name, values);
 	}
 
 	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& values)
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		UploadUniformFloat3(name, values);
 	}
 
 	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& values)
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		UploadUniformFloat4(name, values);
 	}
 
 	void OpenGLShader::SetMat3(const std::string& name, const glm::mat3& matrix)
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		UploadUniformMat3(name, matrix);
 	}
 
 	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& matrix)
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		UploadUniformMat4(name, matrix);
 	}
 

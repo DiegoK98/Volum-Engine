@@ -32,26 +32,36 @@ namespace Volum
 
 	OpenGLVertexArray::OpenGLVertexArray()
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		glCreateVertexArrays(1, &m_rendererID);
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray()
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		glDeleteVertexArrays(1, &m_rendererID);
 	}
 
 	void OpenGLVertexArray::Bind() const
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		glBindVertexArray(m_rendererID);
 	}
 
 	void OpenGLVertexArray::Unbind() const
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		glBindVertexArray(0);
 	}
 
 	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer> vertexBuffer)
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		VLM_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size() != 0, "Vertex Buffer has no layout!");
 		
 		glBindVertexArray(m_rendererID);
@@ -73,6 +83,8 @@ namespace Volum
 
 	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer> indexBuffer)
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		glBindVertexArray(m_rendererID);
 		indexBuffer->Bind();
 

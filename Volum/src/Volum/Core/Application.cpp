@@ -12,6 +12,8 @@ namespace Volum
 
 	Application::Application()
 	{
+		VLM_PROFILE_FUNCTION();
+
 		VLM_CORE_ASSERT(!s_instance, "Application already exists!");
 		s_instance = this;
 
@@ -26,27 +28,41 @@ namespace Volum
 
 	Application::~Application()
 	{
+		VLM_PROFILE_FUNCTION();
+
 		Renderer::Shutdown();
 	}
 
 	void Application::Run()
 	{
+		VLM_PROFILE_FUNCTION();
+
 		while (m_running)
 		{
+			VLM_PROFILE_SCOPE("RunLoop");
+
 			float time = (float)glfwGetTime(); // Temporary. Should be Platform::GetTime()
 			TimeStep timeStep = time - m_lastFrameTime;
 			m_lastFrameTime = time;
 
 			if (!m_minimized)
 			{
-				for (Layer* layer : m_layerStack)
-					layer->OnUpdate(timeStep);
-			}
+				{
+					VLM_PROFILE_SCOPE("LayerStack OnUpdate");
 
-			m_imGuiLayer->Begin();
-			for (Layer* layer : m_layerStack)
-				layer->OnImGuiRender();
-			m_imGuiLayer->End();
+					for (Layer* layer : m_layerStack)
+						layer->OnUpdate(timeStep);
+				}
+
+				m_imGuiLayer->Begin();
+				{
+					VLM_PROFILE_SCOPE("LayerStack OnImGuiRender");
+
+					for (Layer* layer : m_layerStack)
+						layer->OnImGuiRender();
+				}
+				m_imGuiLayer->End();
+			}
 
 			m_window->OnUpdate();
 		}
@@ -54,6 +70,8 @@ namespace Volum
 
 	void Application::OnEvent(Event& e)
 	{
+		VLM_PROFILE_FUNCTION();
+
 		EventDispatcher dispatcher(e);
 
 		dispatcher.Dispatch<WindowCloseEvent>(VLM_BIND_EVENT_FN(Application::OnWindowClose));
@@ -69,12 +87,18 @@ namespace Volum
 
 	void Application::PushLayer(Layer* layer)
 	{
+		VLM_PROFILE_FUNCTION();
+
 		m_layerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* layer)
 	{
+		VLM_PROFILE_FUNCTION();
+
 		m_layerStack.PushOverlay(layer);
+		layer->OnAttach();
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)
@@ -86,6 +110,8 @@ namespace Volum
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
+		VLM_PROFILE_FUNCTION();
+
 		if (e.GetWidth() == 0 || e.GetHeight() == 0)
 		{
 			m_minimized = true;

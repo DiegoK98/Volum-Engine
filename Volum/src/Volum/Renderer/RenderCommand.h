@@ -9,6 +9,8 @@ namespace Volum
 	public:
 		inline static void Init()
 		{
+			VLM_PROFILE_FUNCTION();
+
 			s_rendererAPI->Init();
 		}
 

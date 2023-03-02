@@ -24,16 +24,22 @@ namespace Volum {
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
 	{
+		VLM_PROFILE_FUNCTION();
+
 		Init(props);
 	}
 
 	WindowsWindow::~WindowsWindow()
 	{
+		VLM_PROFILE_FUNCTION();
+
 		Shutdown();
 	}
 
 	void WindowsWindow::Init(const WindowProps& props)
 	{
+		VLM_PROFILE_FUNCTION();
+
 		m_data.Title = props.Title;
 		m_data.Width = props.Width;
 		m_data.Height = props.Height;
@@ -43,15 +49,20 @@ namespace Volum {
 
 		if (s_GLFWWindowCount == 0)
 		{
-			VLM_CORE_INFO("Initializing GLFW");
+			VLM_PROFILE_SCOPE("glfwInit");
+
 			int success = glfwInit();
 			VLM_CORE_ASSERT(success, "Could not intialize GLFW!");
 
 			glfwSetErrorCallback(GLFWErrorCallback);
 		}
 
-		m_window = glfwCreateWindow((int)props.Width, (int)props.Height, m_data.Title.c_str(), nullptr, nullptr);
-		++s_GLFWWindowCount;
+		{
+			VLM_PROFILE_SCOPE("glfwCreateWindow");
+
+			m_window = glfwCreateWindow((int)props.Width, (int)props.Height, m_data.Title.c_str(), nullptr, nullptr);
+			++s_GLFWWindowCount;
+		}
 
 		m_context = GraphicsContext::Create(m_window);
 		m_context->Init();
@@ -154,6 +165,8 @@ namespace Volum {
 
 	void WindowsWindow::Shutdown()
 	{
+		VLM_PROFILE_FUNCTION();
+
 		glfwDestroyWindow(m_window);
 
 		if (--s_GLFWWindowCount == 0)
@@ -165,12 +178,16 @@ namespace Volum {
 
 	void WindowsWindow::OnUpdate()
 	{
+		VLM_PROFILE_FUNCTION();
+
 		glfwPollEvents();
 		m_context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled, unsigned int swapInterval)
 	{
+		VLM_PROFILE_FUNCTION();
+
 		if (enabled)
 			glfwSwapInterval(swapInterval);
 		else

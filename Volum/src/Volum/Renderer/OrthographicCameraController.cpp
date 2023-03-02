@@ -14,6 +14,8 @@ namespace Volum
 
 	void OrthographicCameraController::OnUpdate(TimeStep ts)
 	{
+		VLM_PROFILE_FUNCTION();
+
 		// Move inputs
 		if (Input::IsKeyPressed(VLM_KEY_A))
 		{
@@ -60,6 +62,8 @@ namespace Volum
 
 	void OrthographicCameraController::OnEvent(Event& e)
 	{
+		VLM_PROFILE_FUNCTION();
+
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<MouseScrolledEvent>(VLM_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
 		dispatcher.Dispatch<WindowResizeEvent>(VLM_BIND_EVENT_FN(OrthographicCameraController::OnWindowResize));
@@ -67,6 +71,8 @@ namespace Volum
 
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 	{
+		VLM_PROFILE_FUNCTION();
+
 		m_zoomLevel -= e.GetYOffset() * 0.25f;
 		m_zoomLevel = std::clamp(m_zoomLevel, 0.2f, 100.0f);
 
@@ -77,6 +83,8 @@ namespace Volum
 
 	bool OrthographicCameraController::OnWindowResize(WindowResizeEvent& e)
 	{
+		VLM_PROFILE_FUNCTION();
+
 		m_aspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
 		m_camera.SetProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
 

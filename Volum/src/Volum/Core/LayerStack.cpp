@@ -4,10 +4,6 @@
 
 namespace Volum {
 
-	LayerStack::LayerStack()
-	{
-	}
-
 	LayerStack::~LayerStack()
 	{
 		for (Layer* layer : m_layers)
@@ -21,15 +17,11 @@ namespace Volum {
 	{
 		m_layers.emplace(m_layers.begin() + m_LayerInsertIndex, layer);
 		m_LayerInsertIndex++;
-
-		layer->OnAttach();
 	}
 
 	void LayerStack::PushOverlay(Layer* overlay)
 	{
 		m_layers.emplace_back(overlay);
-
-		overlay->OnAttach();
 	}
 
 	void LayerStack::PopLayer(Layer* layer)

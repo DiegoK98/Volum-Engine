@@ -10,6 +10,8 @@ namespace Volum
 	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)
 		: m_width(width), m_height(height), m_internalFormat(GL_RGBA8), m_dataFormat(GL_RGBA)
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_rendererID);
 		glTextureStorage2D(m_rendererID, 1, m_internalFormat, m_width, m_height);
 
@@ -23,9 +25,15 @@ namespace Volum
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
 		: m_path(path)
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(1);
-		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		stbi_uc* data;
+		{
+			VLM_RENDERER_PROFILE_SCOPE("stbi_load - OpenGLTexture2D::OpenGLTexture2D(const std::string&)");
+			data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		}
 		VLM_CORE_ASSERT(data, "Failed to load image!");
 
 		GLenum internalFormat = 0, dataFormat = 0;
@@ -65,11 +73,15 @@ namespace Volum
 
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		glDeleteTextures(1, &m_rendererID);
 	}
 
 	void OpenGLTexture2D::SetData(void* data, uint32_t size)
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		uint32_t channelSize = m_dataFormat == GL_RGBA ? 4 : 3;
 
 		VLM_CORE_ASSERT(size == m_width * m_height * channelSize, "Data must be entire texture");
@@ -78,6 +90,8 @@ namespace Volum
 
 	void OpenGLTexture2D::Bind(uint32_t slot) const
 	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
 		glBindTextureUnit(slot, m_rendererID);
 	}
 }
