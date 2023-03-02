@@ -56,6 +56,7 @@ namespace Volum
 		s_data->WhiteTexture->SetData(&whiteTexData, sizeof(uint32_t));
 
 		s_data->TextureShader = Shader::Create("assets/shaders/Texture.glsl");
+		s_data->TextureShader->Bind();
 		s_data->TextureShader->SetInt("u_texture", 0);
 	}
 
