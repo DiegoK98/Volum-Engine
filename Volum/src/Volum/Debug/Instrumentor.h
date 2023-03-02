@@ -4,7 +4,6 @@
 #include <chrono>
 #include <algorithm>
 #include <fstream>
-
 #include <thread>
 
 namespace Volum {
@@ -12,7 +11,7 @@ namespace Volum {
 	{
 		std::string Name;
 		long long Start, End;
-		uint32_t ThreadID;
+		std::thread::id ThreadID;
 	};
 
 	struct InstrumentationSession
@@ -23,6 +22,7 @@ namespace Volum {
 	class Instrumentor
 	{
 	private:
+		std::mutex m_Mutex;
 		InstrumentationSession* m_currentSession;
 		std::ofstream m_outputStream;
 		int m_profileCount;
@@ -34,41 +34,68 @@ namespace Volum {
 
 		void BeginSession(const std::string& name, const std::string& filepath = "results.json")
 		{
+			std::lock_guard lock(m_Mutex);
+			if (m_currentSession) {
+				// If there is already a current session, then close it before beginning new one.
+				// Subsequent profiling output meant for the original session will end up in the
+				// newly opened session instead. That's better than having badly formatted profiling output.
+				if (Log::GetCoreLogger()) { // Edge case: BeginSession() might be before Log::Init()
+					VLM_CORE_ERROR("Instrumentor::BeginSession('{0}') when session '{1}' already open.", name, m_currentSession->Name);
+				}
+				InternalEndSession();
+			}
 			m_outputStream.open(filepath);
-			WriteHeader();
-			m_currentSession = new InstrumentationSession{ name };
+			if (m_outputStream.is_open()) {
+				m_currentSession = new InstrumentationSession({ name });
+				WriteHeader();
+			}
+			else {
+				if (Log::GetCoreLogger()) { // Edge case: BeginSession() might be before Log::Init()
+					VLM_CORE_ERROR("Instrumentor could not open results file '{0}'.", filepath);
+				}
+			}
 		}
 
 		void EndSession()
 		{
-			WriteFooter();
-			m_outputStream.close();
-			delete m_currentSession;
-			m_currentSession = nullptr;
-			m_profileCount = 0;
+			std::lock_guard lock(m_Mutex);
+			InternalEndSession();
 		}
 
 		void WriteProfile(const ProfileResult& result)
 		{
+			std::stringstream json;
+
 			if (m_profileCount++ > 0)
-				m_outputStream << ",";
+				json << ",";
 
 			std::string name = result.Name;
 			std::replace(name.begin(), name.end(), '"', '\'');
 
-			m_outputStream << "{";
-			m_outputStream << "\"cat\":\"function\",";
-			m_outputStream << "\"dur\":" << (result.End - result.Start) << ',';
-			m_outputStream << "\"name\":\"" << name << "\",";
-			m_outputStream << "\"ph\":\"X\",";
-			m_outputStream << "\"pid\":0,";
-			m_outputStream << "\"tid\":" << result.ThreadID << ",";
-			m_outputStream << "\"ts\":" << result.Start;
-			m_outputStream << "}";
+			json << "{";
+			json << "\"cat\":\"function\",";
+			json << "\"dur\":" << (result.End - result.Start) << ',';
+			json << "\"name\":\"" << name << "\",";
+			json << "\"ph\":\"X\",";
+			json << "\"pid\":0,";
+			json << "\"tid\":" << result.ThreadID << ",";
+			json << "\"ts\":" << result.Start;
+			json << "}";
 
-			m_outputStream.flush();
+			std::lock_guard lock(m_Mutex);
+			if (m_currentSession) {
+				m_outputStream << json.str();
+				m_outputStream.flush();
+			}
 		}
 
+		static Instrumentor& Get()
+		{
+			static Instrumentor instance;
+			return instance;
+		}
+
+	private:
 		void WriteHeader()
 		{
 			m_outputStream << "{\"otherData\": {},\"traceEvents\":[";
@@ -81,10 +108,18 @@ namespace Volum {
 			m_outputStream.flush();
 		}
 
-		static Instrumentor& Get()
+		// Note: you must already own lock on m_Mutex before
+		// calling InternalEndSession()
+		void InternalEndSession()
 		{
-			static Instrumentor instance;
-			return instance;
+			if (m_currentSession)
+			{
+				WriteFooter();
+				m_outputStream.close();
+				delete m_currentSession;
+				m_currentSession = nullptr;
+				m_profileCount = 0;
+			}
 		}
 	};
 
@@ -110,8 +145,7 @@ namespace Volum {
 			long long start = std::chrono::time_point_cast<std::chrono::microseconds>(m_startTimepoint).time_since_epoch().count();
 			long long end = std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch().count();
 
-			uint32_t threadID = (uint32_t)std::hash<std::thread::id>{}(std::this_thread::get_id());
-			Instrumentor::Get().WriteProfile({ m_name, start, end, threadID });
+			Instrumentor::Get().WriteProfile({ m_name, start, end, std::this_thread::get_id() });
 
 			m_stopped = true;
 		}
@@ -122,8 +156,8 @@ namespace Volum {
 	};
 }
 
-#define VLM_PROFILER 1
-#define VLM_RENDERER_PROFILER 1
+#define VLM_PROFILER 0
+#define VLM_RENDERER_PROFILER 0
 
 #if VLM_PROFILER or VLM_RENDERER_PROFILER
 	// Resolve which function signature macro will be used. Note that this only is resolved when the
