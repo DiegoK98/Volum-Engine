@@ -43,19 +43,13 @@ void Test2D::OnUpdate(Volum::TimeStep ts)
 		VLM_PROFILE_SCOPE("Renderer Draw");
 
 		static float rotation = 0.0f;
-		rotation += ts * 60.0f;
+		rotation += ts * 1.0f;
 
 		Volum::Renderer2D::BeginScene(m_cameraController.GetCamera());
 
 		// Opaque objects
 		Volum::Renderer2D::DrawQuad({ -1.0f, -1.0f }, { 1.0f, 1.0f }, m_squareColor);
 		Volum::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 20.0f, 20.0f }, m_checkerboardTexture, m_tilingFactor, m_checkerboardTintColor);
-
-		// Transparent objects
-		Volum::Renderer2D::DrawQuad({ 5.0f, -1.0f, 0.2f }, { 1.0f, 1.0f }, m_leavesTexture);
-		Volum::Renderer2D::DrawQuad({ -2.0f, 2.0f, 0.2f }, { 1.0f, 1.0f }, m_leavesTexture);
-		Volum::Renderer2D::DrawRotatedQuad({ 4.0f, 0.0f, 0.2f }, rotation, { 1.0f, 1.0f }, m_leavesTexture);
-		Volum::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 2.0f, 0.3f }, { 0.2f, 0.6f, 0.1f, 0.6f });
 
 		for (float y = -5.0f; y < 5.0f; y += 0.5f)
 		{
@@ -65,6 +59,12 @@ void Test2D::OnUpdate(Volum::TimeStep ts)
 				Volum::Renderer2D::DrawQuad({ x, y }, { 0.45f, 0.45f }, { color, 1.0f });
 			}
 		}
+
+		// Transparent objects
+		Volum::Renderer2D::DrawQuad({ 5.0f, -1.0f, 0.2f }, { 1.0f, 1.0f }, m_leavesTexture);
+		Volum::Renderer2D::DrawQuad({ -2.0f, 2.0f, 0.2f }, { 1.0f, 1.0f }, m_leavesTexture);
+		Volum::Renderer2D::DrawRotatedQuad({ 4.0f, 0.0f, 0.2f }, rotation, { 1.0f, 1.0f }, m_leavesTexture);
+		Volum::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 2.0f, 0.3f }, { 0.2f, 0.6f, 0.1f, 0.6f });
 
 		Volum::Renderer2D::EndScene();
 	}
