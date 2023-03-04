@@ -23,9 +23,9 @@ namespace Volum
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 
-		inline Window& GetWindow() { return *m_window; }
+		Window& GetWindow() { return *m_window; }
 
-		inline static Application& Get() { return *s_instance; }
+		static Application& Get() { return *s_instance; }
 	private:
 		void Run();
 

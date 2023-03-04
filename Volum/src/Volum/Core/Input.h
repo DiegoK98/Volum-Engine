@@ -14,9 +14,9 @@ namespace Volum
 		Input(const Input&) = delete;
 		Input& operator=(const Input&) = delete;
 
-		inline static bool IsKeyPressed(KeyCode key) { return s_instance->IsKeyPressedImpl(key); }
-		inline static float IsMouseButtonPressed(MouseCode button) { return s_instance->IsMouseButtonPressedImpl(button); }
-		inline static std::pair<float, float> GetMousePos() { return s_instance->GetMousePosImpl(); }
+		static bool IsKeyPressed(KeyCode key) { return s_instance->IsKeyPressedImpl(key); }
+		static float IsMouseButtonPressed(MouseCode button) { return s_instance->IsMouseButtonPressedImpl(button); }
+		static std::pair<float, float> GetMousePos() { return s_instance->GetMousePosImpl(); }
 
 		static Scope<Input> Create();
 	protected:

@@ -12,8 +12,8 @@ namespace Volum
 	public:
 		static void Init();
 
-		inline static Ref<spdlog::logger>& GetCoreLogger() { return s_coreLogger; }
-		inline static Ref<spdlog::logger>& GetClientLogger() { return s_clientLogger; }
+		static Ref<spdlog::logger>& GetCoreLogger() { return s_coreLogger; }
+		static Ref<spdlog::logger>& GetClientLogger() { return s_clientLogger; }
 	private:
 		static Ref<spdlog::logger> s_coreLogger;
 		static Ref<spdlog::logger> s_clientLogger;

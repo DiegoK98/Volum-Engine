@@ -23,6 +23,7 @@ namespace Volum
 
 		// Uniforms
 		virtual void SetInt(const std::string& name, const int value) override;
+		virtual void SetIntArray(const std::string& name, const int* values, uint32_t count) override;
 		virtual void SetFloat(const std::string& name, const float value) override;
 		virtual void SetFloat2(const std::string& name, const glm::vec2& values) override;
 		virtual void SetFloat3(const std::string& name, const glm::vec3& values) override;
@@ -31,6 +32,7 @@ namespace Volum
 		virtual void SetMat4(const std::string& name, const glm::mat4& matrix) override;
 
 		void UploadUniformInt(const std::string& name, const int value);
+		void UploadUniformIntArray(const std::string& name, const int* values, uint32_t count);
 		void UploadUniformFloat(const std::string& name, const float value);
 		void UploadUniformFloat2(const std::string& name, const glm::vec2& values);
 		void UploadUniformFloat3(const std::string& name, const glm::vec3& values);

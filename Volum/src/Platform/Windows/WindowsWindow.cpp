@@ -51,7 +51,7 @@ namespace Volum {
 			VLM_PROFILE_SCOPE("glfwInit");
 
 			int success = glfwInit();
-			VLM_CORE_ASSERT(success, "Could not intialize GLFW!");
+			VLM_CORE_ASSERT(success, "Could not initialize GLFW!");
 
 			glfwSetErrorCallback(GLFWErrorCallback);
 		}
@@ -59,10 +59,10 @@ namespace Volum {
 		{
 			VLM_PROFILE_SCOPE("glfwCreateWindow");
 
-#if defined(VLM_DEBUG)
-			if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
-				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
-#endif
+//#if defined(VLM_DEBUG)
+//			if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
+//				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+//#endif
 
 			m_window = glfwCreateWindow((int)props.Width, (int)props.Height, m_data.Title.c_str(), nullptr, nullptr);
 			++s_GLFWWindowCount;
