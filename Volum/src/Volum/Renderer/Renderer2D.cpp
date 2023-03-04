@@ -106,6 +106,8 @@ namespace Volum
 	void Renderer2D::Shutdown()
 	{
 		VLM_PROFILE_FUNCTION();
+
+		delete[] s_data.QuadVertexBufferBase;
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
@@ -216,6 +218,9 @@ namespace Volum
 
 		if (textureIndex == 0.0f)
 		{
+			if (s_data.TextureSlotIndex >= Renderer2DData::MaxTextureSlotsPerDraw)
+				FlushAndReset();
+
 			textureIndex = (float)s_data.TextureSlotIndex;
 			s_data.TextureSlots[s_data.TextureSlotIndex] = texture;
 			s_data.TextureSlotIndex++;
@@ -299,6 +304,9 @@ namespace Volum
 
 		if (textureIndex == 0.0f)
 		{
+			if (s_data.TextureSlotIndex >= Renderer2DData::MaxTextureSlotsPerDraw)
+				FlushAndReset();
+
 			textureIndex = (float)s_data.TextureSlotIndex;
 			s_data.TextureSlots[s_data.TextureSlotIndex] = texture;
 			s_data.TextureSlotIndex++;
