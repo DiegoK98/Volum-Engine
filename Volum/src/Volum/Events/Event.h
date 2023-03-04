@@ -2,7 +2,7 @@
 
 #include "vlmpch.h"
 
-#include "Volum/Core/Core.h"
+#include "Volum/Core/Base.h"
 
 namespace Volum {
 

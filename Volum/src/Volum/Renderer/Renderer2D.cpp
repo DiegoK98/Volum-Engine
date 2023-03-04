@@ -129,6 +129,9 @@ namespace Volum
 	{
 		VLM_PROFILE_FUNCTION();
 
+		if (s_data.QuadIndexCount == 0)
+			return; // Nothing to draw
+
 		uint32_t dataSize = (uint32_t)((uint8_t*)s_data.QuadVertexBufferPtr - (uint8_t*)s_data.QuadVertexBufferBase); // cast to 1 byte type to get size in bytes
 		s_data.QuadVertexBuffer->SetData(s_data.QuadVertexBufferBase, dataSize);
 

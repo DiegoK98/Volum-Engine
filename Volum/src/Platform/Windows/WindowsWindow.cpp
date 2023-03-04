@@ -59,10 +59,10 @@ namespace Volum {
 		{
 			VLM_PROFILE_SCOPE("glfwCreateWindow");
 
-//#if defined(VLM_DEBUG)
-//			if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
-//				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
-//#endif
+#if defined(VLM_DEBUG)
+			if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
+				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+#endif
 
 			m_window = glfwCreateWindow((int)props.Width, (int)props.Height, m_data.Title.c_str(), nullptr, nullptr);
 			++s_GLFWWindowCount;

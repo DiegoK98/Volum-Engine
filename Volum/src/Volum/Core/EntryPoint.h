@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Volum/Core/Core.h"
+#include "Volum/Core/Base.h"
 
 #ifdef VLM_PLATFORM_WINDOWS
 

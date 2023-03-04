@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Volum/Core/Core.h"
+#include "Volum/Core/Base.h"
 #include "Volum/Core/Window.h"
 #include "Volum/Core/LayerStack.h"
 #include "Volum/Events/Event.h"
