@@ -96,6 +96,55 @@ project "Volum"
         runtime "Release"
         optimize "on"
 
+group "Volum Apps"
+
+project "Volum-Editor"
+    location "Volum-Editor"
+    kind "ConsoleApp"
+    language "C++"
+    cppdialect "C++20"
+    staticruntime "on"
+
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    files
+    {
+        "%{prj.name}/src/**.h",
+        "%{prj.name}/src/**.cpp"
+    }
+
+    includedirs
+    {
+        "Volum/vendor/spdlog/include",
+        "Volum/src",
+        "Volum/vendor",
+        "%{IncludeDir.glm}"
+    }
+
+    links
+    {
+        "Volum"
+    }
+
+    filter "system:windows"
+        systemversion "latest"
+
+    filter "configurations:Debug"
+        defines "VLM_DEBUG"
+        runtime "Debug"
+        symbols "on"
+
+    filter "configurations:Release"
+        defines "VLM_RELEASE"
+        runtime "Release"
+        optimize "on"
+
+    filter "configurations:Dist"
+        defines "VLM_DIST"
+        runtime "Release"
+        optimize "on"
+
 project "Sandbox"
     location "Sandbox"
     kind "ConsoleApp"

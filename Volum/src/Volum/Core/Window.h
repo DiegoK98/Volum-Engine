@@ -10,10 +10,10 @@ namespace Volum {
 	struct WindowProps
 	{
 		std::string Title;
-		unsigned int Width;
-		unsigned int Height;
+		uint32_t Width;
+		uint32_t Height;
 
-		WindowProps(const std::string& title = "Volum Engine", unsigned int width = 1280, unsigned int height = 720)
+		WindowProps(const std::string& title = "Volum Engine", uint32_t width = 1280, uint32_t height = 720)
 			: Title(title), Width(width), Height(height)
 		{
 		}

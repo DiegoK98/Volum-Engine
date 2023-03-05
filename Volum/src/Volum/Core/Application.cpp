@@ -10,14 +10,14 @@ namespace Volum
 {
 	Application* Application::s_instance = nullptr;
 
-	Application::Application()
+	Application::Application(const std::string& name)
 	{
 		VLM_PROFILE_FUNCTION();
 
 		VLM_CORE_ASSERT(!s_instance, "Application already exists!");
 		s_instance = this;
 
-		m_window = Window::Create();
+		m_window = Window::Create(WindowProps(name));
 		m_window->SetEventCallback(VLM_BIND_EVENT_FN(Application::OnEvent));
 
 		Renderer::Init();

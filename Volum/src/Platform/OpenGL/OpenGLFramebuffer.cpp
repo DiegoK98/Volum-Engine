@@ -11,7 +11,7 @@ namespace Volum
 	{
 		VLM_RENDERER_PROFILE_FUNCTION();
 
-		Invalidate();
+		Recreate();
 	}
 
 	OpenGLFramebuffer::~OpenGLFramebuffer()
@@ -19,11 +19,20 @@ namespace Volum
 		VLM_RENDERER_PROFILE_FUNCTION();
 
 		glDeleteFramebuffers(1, &m_rendererID);
+		glDeleteTextures(1, &m_colorAttachment);
+		glDeleteTextures(1, &m_depthAttachment);
 	}
 
-	void OpenGLFramebuffer::Invalidate()
+	void OpenGLFramebuffer::Recreate()
 	{
 		VLM_RENDERER_PROFILE_FUNCTION();
+
+		if (m_rendererID)
+		{
+			glDeleteFramebuffers(1, &m_rendererID);
+			glDeleteTextures(1, &m_colorAttachment);
+			glDeleteTextures(1, &m_depthAttachment);
+		}
 
 		glCreateFramebuffers(1, &m_rendererID);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_rendererID);
@@ -41,8 +50,7 @@ namespace Volum
 		// Depth attachment
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_depthAttachment);
 		glBindTexture(GL_TEXTURE_2D, m_depthAttachment);
-		//glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, m_specification.Width, m_specification.Height);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, m_specification.Width, m_specification.Height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+		glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, m_specification.Width, m_specification.Height);
 
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_depthAttachment, 0);
 
@@ -56,6 +64,7 @@ namespace Volum
 		VLM_RENDERER_PROFILE_FUNCTION();
 
 		glBindFramebuffer(GL_FRAMEBUFFER, m_rendererID);
+		glViewport(0, 0, m_specification.Width, m_specification.Height);
 	}
 
 	void OpenGLFramebuffer::Unbind()
@@ -63,5 +72,15 @@ namespace Volum
 		VLM_RENDERER_PROFILE_FUNCTION();
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void OpenGLFramebuffer::Resize(const uint32_t width, const uint32_t height)
+	{
+		VLM_RENDERER_PROFILE_FUNCTION();
+
+		m_specification.Width = width;
+		m_specification.Height = height;
+
+		Recreate();
 	}
 }
