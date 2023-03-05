@@ -35,6 +35,15 @@ namespace Volum
 	{
 		VLM_PROFILE_FUNCTION();
 
+		// Resize
+		if (Volum::FramebufferSpecification spec = m_framebuffer->GetSpecification();
+			m_viewportSize.x > 0.0f && m_viewportSize.y > 0.0f && // zero sized framebuffer is invalid
+			(spec.Width != m_viewportSize.x || spec.Height != m_viewportSize.y))
+		{
+			m_framebuffer->Resize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
+			m_cameraController.OnResize(m_viewportSize.x, m_viewportSize.y);
+		}
+
 		// Update
 		if (m_viewportFocused)
 			m_cameraController.OnUpdate(ts);
@@ -158,13 +167,7 @@ namespace Volum
 		Application::Get().GetImGuiLayer()->BlockEvents(!m_viewportHovered);
 
 		ImVec2 panelSize = ImGui::GetContentRegionAvail();
-		if (m_viewportSize != *(glm::vec2*)&panelSize)
-		{
-			m_framebuffer->Resize((uint32_t)panelSize.x, (uint32_t)panelSize.y);
-			m_viewportSize = { panelSize.x, panelSize.y };
-
-			m_cameraController.OnResize(panelSize.x, panelSize.y);
-		}
+		m_viewportSize = { panelSize.x, panelSize.y };
 
 		auto textureID = (uint16_t)m_framebuffer->GetColorAttachmentRendererID(); // Cast to 16bits to eliminate a warning
 		ImGui::Image((void*)textureID, panelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });

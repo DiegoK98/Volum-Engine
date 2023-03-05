@@ -6,6 +6,9 @@
 
 namespace Volum
 {
+	// TODO: Should be taken from device capabilities
+	static const uint32_t s_maxFramebufferSize = 8192;
+
 	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)
 		: m_specification(spec)
 	{
@@ -78,6 +81,12 @@ namespace Volum
 	{
 		VLM_RENDERER_PROFILE_FUNCTION();
 
+		if (width == 0 || height == 0 || width > s_maxFramebufferSize || height > s_maxFramebufferSize)
+		{
+			VLM_CORE_WARN("Attempted to resize framebuffer to {0}x{1}", width, height);
+
+			return;
+		}
 		m_specification.Width = width;
 		m_specification.Height = height;
 
