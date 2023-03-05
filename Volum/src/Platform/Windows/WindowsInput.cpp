@@ -1,6 +1,6 @@
 #include "vlmpch.h"
 
-#include "WindowsInput.h"
+#include "Volum/Core/Input.h"
 
 #include "Volum/Core/Application.h"
 
@@ -8,7 +8,7 @@
 
 namespace Volum
 {
-	bool WindowsInput::IsKeyPressedImpl(KeyCode key)
+	bool Input::IsKeyPressed(KeyCode key)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		auto state = glfwGetKey(window, static_cast<int32_t>(key));
@@ -16,7 +16,7 @@ namespace Volum
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
-	float WindowsInput::IsMouseButtonPressedImpl(MouseCode button)
+	float Input::IsMouseButtonPressed(MouseCode button)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		auto state = glfwGetMouseButton(window, static_cast<int32_t>(button));
@@ -24,7 +24,7 @@ namespace Volum
 		return state == GLFW_PRESS;
 	}
 
-	std::pair<float, float> WindowsInput::GetMousePosImpl()
+	std::pair<float, float> Input::GetMousePos()
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 
@@ -32,19 +32,5 @@ namespace Volum
 		glfwGetCursorPos(window, &xpos, &ypos);
 
 		return { (float)xpos, (float)xpos };
-	}
-
-	float WindowsInput::GetMouseXImpl()
-	{
-		auto [x, y] = WindowsInput::GetMousePosImpl();
-
-		return x;
-	}
-
-	float WindowsInput::GetMouseYImpl()
-	{
-		auto [x, y] = WindowsInput::GetMousePosImpl();
-
-		return y;
 	}
 }
