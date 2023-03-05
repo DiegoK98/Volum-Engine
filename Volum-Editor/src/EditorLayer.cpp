@@ -41,7 +41,7 @@ namespace Volum
 			(spec.Width != m_viewportSize.x || spec.Height != m_viewportSize.y))
 		{
 			m_framebuffer->Resize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
-			m_cameraController.OnResize(m_viewportSize.x, m_viewportSize.y);
+			m_cameraController.Resize(m_viewportSize.x, m_viewportSize.y);
 		}
 
 		// Update
@@ -164,7 +164,7 @@ namespace Volum
 
 		m_viewportFocused = ImGui::IsWindowFocused();
 		m_viewportHovered = ImGui::IsWindowHovered();
-		Application::Get().GetImGuiLayer()->BlockEvents(!m_viewportHovered);
+		Application::Get().GetImGuiLayer()->BlockEvents(!m_viewportHovered); // Only let events through if hovering
 
 		ImVec2 panelSize = ImGui::GetContentRegionAvail();
 		m_viewportSize = { panelSize.x, panelSize.y };

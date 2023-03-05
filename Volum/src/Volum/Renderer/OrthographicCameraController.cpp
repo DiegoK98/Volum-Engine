@@ -69,8 +69,10 @@ namespace Volum
 		dispatcher.Dispatch<WindowResizeEvent>(VLM_BIND_EVENT_FN(OrthographicCameraController::OnWindowResize));
 	}
 
-	void OrthographicCameraController::OnResize(float width, float height)
+	void OrthographicCameraController::Resize(float width, float height)
 	{
+		VLM_PROFILE_FUNCTION();
+
 		m_aspectRatio = width / height;
 		m_camera.SetProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
 	}
@@ -91,7 +93,7 @@ namespace Volum
 	{
 		VLM_PROFILE_FUNCTION();
 
-		OnResize((float)e.GetWidth(), (float)e.GetHeight());
+		Resize((float)e.GetWidth(), (float)e.GetHeight());
 
 		return false;
 	}
