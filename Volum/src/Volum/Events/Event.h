@@ -38,6 +38,8 @@ namespace Volum {
 	class Event
 	{
 	public:
+		virtual ~Event() = default;
+
 		bool handled = false;
 
 		virtual EventType GetEventType() const = 0;

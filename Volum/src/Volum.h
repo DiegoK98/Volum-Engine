@@ -24,6 +24,7 @@
 
 #include "Volum/Renderer/Buffer.h"
 #include "Volum/Renderer/Shader.h"
+#include "Volum/Renderer/Framebuffer.h"
 #include "Volum/Renderer/Texture.h"
 #include "Volum/Renderer/VertexArray.h"
 

@@ -20,6 +20,7 @@ private:
 	// Temp
 	Volum::Ref<Volum::VertexArray> m_squareVA;
 	Volum::Ref<Volum::Shader> m_flatColorShader;
+	Volum::Ref<Volum::Framebuffer> m_framebuffer;
 
 	Volum::Ref<Volum::Texture2D> m_checkerboardTexture;
 	Volum::Ref<Volum::Texture2D> m_leavesTexture;

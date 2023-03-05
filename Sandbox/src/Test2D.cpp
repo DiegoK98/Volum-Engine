@@ -16,6 +16,12 @@ void Test2D::OnAttach()
 
 	m_checkerboardTexture = Volum::Texture2D::Create("assets/textures/checkerboard.png");
 	m_leavesTexture = Volum::Texture2D::Create("assets/textures/leaves.png");
+
+    Volum::FramebufferSpecification framebufferSpec;
+    framebufferSpec.Width = 1280;
+    framebufferSpec.Height = 720;
+
+    m_framebuffer = Volum::Framebuffer::Create(framebufferSpec);
 }
 
 void Test2D::OnDetach()
@@ -35,6 +41,7 @@ void Test2D::OnUpdate(Volum::TimeStep ts)
 	{
 		VLM_PROFILE_SCOPE("Renderer Prep");
 
+        m_framebuffer->Bind();
 		Volum::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Volum::RenderCommand::Clear();
 	}
@@ -67,6 +74,7 @@ void Test2D::OnUpdate(Volum::TimeStep ts)
 		Volum::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 2.0f, 0.3f }, { 0.2f, 0.6f, 0.1f, 0.6f });
 
 		Volum::Renderer2D::EndScene();
+        m_framebuffer->Unbind();
 	}
 }
 
@@ -79,8 +87,6 @@ void Test2D::OnImGuiRender()
     static bool opt_padding = false;
     static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
-    // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-    // because it would be confusing to have two docking targets within each others.
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
     if (opt_fullscreen)
     {
@@ -98,19 +104,14 @@ void Test2D::OnImGuiRender()
         dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
     }
 
-    // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
-    // and handle the pass-thru hole, so we ask Begin() to not render a background.
     if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
         window_flags |= ImGuiWindowFlags_NoBackground;
 
-    // Important: note that we proceed even if Begin() returns false (aka window is collapsed).
-    // This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
-    // all active windows docked into it will lose their parent and become undocked.
-    // We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
-    // any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
     if (!opt_padding)
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-    ImGui::Begin("DockSpace Demo", &p_open, window_flags);
+
+    ImGui::Begin("Editor Dockspace", &p_open, window_flags);
+
     if (!opt_padding)
         ImGui::PopStyleVar();
 
@@ -118,7 +119,7 @@ void Test2D::OnImGuiRender()
         ImGui::PopStyleVar(2);
 
     // DockSpace
-    ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+    ImGuiID dockspace_id = ImGui::GetID("EditorDockspace");
     ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 
     if (ImGui::BeginMenuBar())
@@ -147,8 +148,8 @@ void Test2D::OnImGuiRender()
     ImGui::End();
 
     ImGui::Begin("Scene View");
-    uint32_t textureID = m_checkerboardTexture->GetRendererID();
-    ImGui::Image((void*)textureID, ImVec2{ 512.0f, 512.0f });
+    uint32_t textureID = m_framebuffer->GetColorAttachmentRendererID();
+    ImGui::Image((void*)textureID, ImVec2{ 1280.0f, 720.0f });
     ImGui::End();
 
     ImGui::End();
