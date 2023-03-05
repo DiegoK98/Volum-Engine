@@ -65,7 +65,12 @@ namespace Volum
 
 	void ImGuiLayer::OnEvent(Event& e)
 	{
-
+		if (m_blockEvents)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			e.handled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+			e.handled |= e.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+		}
 	}
 
 	void ImGuiLayer::Begin()

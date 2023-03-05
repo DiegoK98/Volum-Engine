@@ -20,9 +20,12 @@ namespace Volum
 		void Begin();
 		void End();
 
+		void BlockEvents(bool block) { m_blockEvents = block; }
+		
 		void SetDarkThemeColors();
 
 	private:
+		bool m_blockEvents = true;
 		float m_time = 0.0f;
 	};
 }

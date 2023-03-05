@@ -27,6 +27,8 @@ namespace Volum
 
 		void Close() { m_running = false; };
 
+		ImGuiLayer* GetImGuiLayer() { return m_imGuiLayer; }
+
 		static Application& Get() { return *s_instance; }
 	private:
 		void Run();
