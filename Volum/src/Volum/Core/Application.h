@@ -25,6 +25,8 @@ namespace Volum
 
 		Window& GetWindow() { return *m_window; }
 
+		void Close() { m_running = false; };
+
 		static Application& Get() { return *s_instance; }
 	private:
 		void Run();
