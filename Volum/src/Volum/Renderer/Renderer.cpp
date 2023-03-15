@@ -3,6 +3,7 @@
 #include "Renderer.h"
 
 #include "Volum/Renderer/Renderer2D.h"
+#include "Volum/Renderer/Renderer3D.h"
 
 namespace Volum
 {
@@ -13,7 +14,10 @@ namespace Volum
 		VLM_PROFILE_FUNCTION();
 
 		RenderCommand::Init();
-		Renderer2D::Init();
+
+		// Choose 2D or 3D
+		//Renderer2D::Init();
+		Renderer3D::Init();
 	}
 
 	void Renderer::Shutdown()
