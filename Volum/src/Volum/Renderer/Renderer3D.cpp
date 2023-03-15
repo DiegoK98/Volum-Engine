@@ -223,7 +223,7 @@ namespace Volum
 		{
 			s_data.QuadVertexBufferPtr->Position = transform * s_data.QuadVertexPositions[i];
 			s_data.QuadVertexBufferPtr->Color = tintColor;
-			s_data.QuadVertexBufferPtr->TexCoords = textureCoords[i];
+			s_data.QuadVertexBufferPtr->TexCoords = textureCoords[i]; 
 			s_data.QuadVertexBufferPtr->TexIndex = textureIndex;
 			s_data.QuadVertexBufferPtr->TexTilingFactor = textureTilingFactor;
 			s_data.QuadVertexBufferPtr++;

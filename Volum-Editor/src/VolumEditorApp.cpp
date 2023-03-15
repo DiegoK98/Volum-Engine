@@ -1,7 +1,7 @@
 #include <Volum.h>
 #include <Volum/Core/EntryPoint.h>
 
-//#include "EditorLayer.h"
+#include "EditorLayer.h"
 #include "Editor3DLayer.h"
 
 namespace Volum

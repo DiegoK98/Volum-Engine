@@ -11,7 +11,7 @@ uniform mat4 u_viewProjMat;
 
 out vec4 v_color;
 out vec2 v_texCoords;
-out float v_texIndex;
+flat out float v_texIndex;
 out float v_texTilingFactor;
 
 void main()
@@ -28,7 +28,7 @@ void main()
 
 in vec4 v_color;
 in vec2 v_texCoords;
-in float v_texIndex;
+flat in float v_texIndex;
 in float v_texTilingFactor;
 
 uniform sampler2D u_textures[32];
