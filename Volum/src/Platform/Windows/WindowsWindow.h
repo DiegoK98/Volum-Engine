@@ -23,11 +23,11 @@ namespace Volum {
 		void SetVSync(bool enabled, unsigned int swapInterval = 1) override;
 		bool IsVSync() const override;
 
-		virtual void* GetNativeWindow() const { return m_window; }
+		virtual void* GetNativeWindow() const override { return m_window; }
 	private:
-		virtual void Init(const WindowProps& props);
-		virtual void Shutdown();
-	private:
+		void Init(const WindowProps& props);
+		void Shutdown();
+
 		GLFWwindow* m_window;
 		Scope<GraphicsContext> m_context;
 

@@ -166,6 +166,9 @@ namespace Volum
 		m_viewportHovered = ImGui::IsWindowHovered();
 		Application::Get().GetImGuiLayer()->BlockEvents(!m_viewportHovered); // Only let events through if hovering
 
+		if (!m_viewportHovered)
+			m_cameraController.SetCursorMoveCamera(false);
+
 		ImVec2 panelSize = ImGui::GetContentRegionAvail();
 		m_viewportSize = { panelSize.x, panelSize.y };
 

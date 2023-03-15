@@ -6,6 +6,10 @@
 
 namespace Volum
 {
+	static bool s_noPreviousPos = true;
+	static float s_previousMousePosX = 0.0f;
+	static float s_previousMousePosY = 0.0f;
+
 	Camera3DController::Camera3DController(float fovY, float aspectRatio, float zNear, float zFar)
 		: m_aspectRatio(aspectRatio), m_fovY(fovY), m_zNear(zNear), m_zFar(zFar), m_camera(fovY, aspectRatio, zNear, zFar)
 	{
@@ -39,6 +43,15 @@ namespace Volum
 			m_cameraPosition.z -= -cos(glm::radians(m_cameraRotation.y)) * m_cameraTranslationSpeed * ts;
 		}
 
+		if (Input::IsKeyPressed(VLM_KEY_E))
+		{
+			m_cameraPosition.y += m_cameraTranslationSpeed * ts;
+		}
+		else if (Input::IsKeyPressed(VLM_KEY_Q))
+		{
+			m_cameraPosition.y -= m_cameraTranslationSpeed * ts;
+		}
+
 		m_camera.SetPosition(m_cameraPosition);
 
 		m_cameraTranslationSpeed = 3.0f;
@@ -50,6 +63,8 @@ namespace Volum
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<MouseScrolledEvent>(VLM_BIND_EVENT_FN(Camera3DController::OnMouseScrolled));
+		dispatcher.Dispatch<MouseButtonPressedEvent>(VLM_BIND_EVENT_FN(Camera3DController::OnMouseButtonPressed));
+		dispatcher.Dispatch<MouseButtonReleasedEvent>(VLM_BIND_EVENT_FN(Camera3DController::OnMouseButtonReleased));
 		dispatcher.Dispatch<MouseMovedEvent>(VLM_BIND_EVENT_FN(Camera3DController::OnMouseMoved));
 		dispatcher.Dispatch<WindowResizeEvent>(VLM_BIND_EVENT_FN(Camera3DController::OnWindowResize));
 	}
@@ -74,26 +89,61 @@ namespace Volum
 		return false;
 	}
 
+	bool Camera3DController::OnMouseButtonPressed(MouseButtonPressedEvent& e)
+	{
+		VLM_PROFILE_FUNCTION();
+
+		if (e.GetMouseButton() == MouseCode::Button0)
+		{
+			m_cursorMoveCameraEnabled = true;
+
+			s_noPreviousPos = true;
+		}
+
+		return false;
+	}
+
+	bool Camera3DController::OnMouseButtonReleased(MouseButtonReleasedEvent& e)
+	{
+		VLM_PROFILE_FUNCTION();
+
+		if (e.GetMouseButton() == MouseCode::Button0)
+			m_cursorMoveCameraEnabled = false;
+
+		return false;
+	}
+
 	bool Camera3DController::OnMouseMoved(MouseMovedEvent& e)
 	{
 		VLM_PROFILE_FUNCTION();
 
-		m_cameraRotation.y -= (e.GetX() - s_previousMousePosX) * m_cameraRotationSpeed;
-		m_cameraRotation.x -= (e.GetY() - s_previousMousePosY) * m_cameraRotationSpeed;
+		if (m_cursorMoveCameraEnabled)
+		{
+			if (s_noPreviousPos)
+			{
+				s_previousMousePosX = e.GetX();
+				s_previousMousePosY = e.GetY();
 
-		// TODO: Fix cursor pos or disable it, so it does not go out of bounds
+				s_noPreviousPos = false;
+			}
 
-		s_previousMousePosX = e.GetX();
-		s_previousMousePosY = e.GetY();
+			m_cameraRotation.y -= (e.GetX() - s_previousMousePosX) * m_cameraRotationSpeed;
+			m_cameraRotation.x -= (e.GetY() - s_previousMousePosY) * m_cameraRotationSpeed;
 
-		if (m_cameraRotation.y > 180.0f)
-			m_cameraRotation.y -= 360.0f;
-		else if (m_cameraRotation.y <= -180.0f)
-			m_cameraRotation.y += 360.0f;
+			// TODO: Fix cursor pos or disable it, so it does not go out of bounds
 
-		m_cameraRotation.x = glm::clamp(m_cameraRotation.x, -90.0f, 90.0f);
+			s_previousMousePosX = e.GetX();
+			s_previousMousePosY = e.GetY();
 
-		m_camera.SetRotation(m_cameraRotation);
+			if (m_cameraRotation.y > 180.0f)
+				m_cameraRotation.y -= 360.0f;
+			else if (m_cameraRotation.y <= -180.0f)
+				m_cameraRotation.y += 360.0f;
+
+			m_cameraRotation.x = glm::clamp(m_cameraRotation.x, -90.0f, 90.0f);
+
+			m_camera.SetRotation(m_cameraRotation);
+		}
 
 		return false;
 	}

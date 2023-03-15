@@ -7,9 +7,6 @@
 
 #include <glm/glm.hpp>
 
-static float s_previousMousePosX = 0.0f;
-static float s_previousMousePosY = 0.0f;
-
 namespace Volum
 {
 	class Camera3DController
@@ -23,10 +20,16 @@ namespace Volum
 
 		const PerspectiveCamera& GetCamera() const { return m_camera; }
 		PerspectiveCamera& GetCamera() { return m_camera; }
+
+		void SetCursorMoveCamera(bool enabled = true) { m_cursorMoveCameraEnabled = enabled; }
 	private:
 		bool OnMouseScrolled(MouseScrolledEvent& e);
+		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
+		bool OnMouseButtonReleased(MouseButtonReleasedEvent& e);
 		bool OnMouseMoved(MouseMovedEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
+
+		bool m_cursorMoveCameraEnabled = false;
 
 		float m_aspectRatio;
 		float m_fovY;
