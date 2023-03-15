@@ -7,7 +7,7 @@
 namespace Volum
 {
 	Editor3DLayer::Editor3DLayer()
-		: Layer("Editor 3D Layer"), m_cameraController(1280.0f / 720.0f)
+		: Layer("Editor 3D Layer"), m_cameraController(45.0f, 1280.0f / 720.0f)
 	{
 
 	}
@@ -67,23 +67,23 @@ namespace Volum
 			Renderer3D::BeginScene(m_cameraController.GetCamera());
 
 			// Opaque objects
-			Renderer3D::DrawQuad({ -1.0f, -1.0f, 0.0f }, { 1.0f, 1.0f }, m_squareColor);
-			Renderer3D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 20.0f, 20.0f }, m_checkerboardTexture, m_tilingFactor, m_checkerboardTintColor);
+			Renderer3D::DrawQuad({ -1.0f, -1.0f, -1.0f }, { 1.0f, 1.0f }, m_squareColor);
+			Renderer3D::DrawQuad({ 0.0f, 0.0f, -1.1f }, { 20.0f, 20.0f }, m_checkerboardTexture, m_tilingFactor, m_checkerboardTintColor);
 
 			for (float y = -5.0f; y < 5.0f; y += 0.5f)
 			{
 				for (float x = -5.0f; x < 5.0f; x += 0.5f)
 				{
 					glm::vec3 color = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f };
-					Renderer3D::DrawQuad({ x, y, 0.0f }, { 0.45f, 0.45f }, { color, 1.0f });
+					Renderer3D::DrawQuad({ x, y, -1.0f }, { 0.45f, 0.45f }, { color, 1.0f });
 				}
 			}
 
 			// Transparent objects
-			Renderer3D::DrawQuad({ 5.0f, -1.0f, 0.2f }, { 1.0f, 1.0f }, m_leavesTexture);
-			Renderer3D::DrawQuad({ -2.0f, 2.0f, 0.2f }, { 1.0f, 1.0f }, m_leavesTexture);
-			Renderer3D::DrawRotatedQuad({ 4.0f, 0.0f, 0.2f }, { 0.0f, 0.0f, rotation}, { 1.0f, 1.0f }, m_leavesTexture);
-			Renderer3D::DrawQuad({ 0.5f, -0.5f, 0.0f }, { 2.0f, 0.3f }, { 0.2f, 0.6f, 0.1f, 0.6f });
+			Renderer3D::DrawQuad({ 5.0f, -1.0f, -1.2f }, { 1.0f, 1.0f }, m_leavesTexture);
+			Renderer3D::DrawQuad({ -2.0f, 2.0f, -1.2f }, { 1.0f, 1.0f }, m_leavesTexture);
+			Renderer3D::DrawRotatedQuad({ 4.0f, -1.0f, 0.2f }, { 0.0f, 0.0f, rotation}, { 1.0f, 1.0f }, m_leavesTexture);
+			Renderer3D::DrawQuad({ 0.5f, -0.5f, -1.0f }, { 2.0f, 0.3f }, { 0.2f, 0.6f, 0.1f, 0.6f });
 
 			Renderer3D::EndScene();
 			m_framebuffer->Unbind();

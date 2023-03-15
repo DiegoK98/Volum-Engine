@@ -15,7 +15,7 @@ public:
 	virtual void OnImGuiRender() override;
 	virtual void OnEvent(Volum::Event& event) override;
 private:
-	Volum::OrthographicCameraController m_cameraController;
+	Volum::Camera2DController m_cameraController;
 
 	// Temp
 	Volum::Ref<Volum::VertexArray> m_squareVA;

@@ -9,10 +9,10 @@
 
 namespace Volum
 {
-	class OrthographicCameraController
+	class Camera2DController
 	{
 	public:
-		OrthographicCameraController(float aspectRatio, bool rotation = false);
+		Camera2DController(float aspectRatio, bool rotation = false);
 
 		void OnUpdate(TimeStep ts);
 		void OnEvent(Event& e);

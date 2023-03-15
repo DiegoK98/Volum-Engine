@@ -1,18 +1,18 @@
 #include "vlmpch.h"
 
-#include "OrthographicCameraController.h"
+#include "Camera2DController.h"
 #include "Volum/Core/Input.h"
 #include "Volum/Core/KeyCodes.h"
 
 namespace Volum
 {
-	OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation)
+	Camera2DController::Camera2DController(float aspectRatio, bool rotation)
 		: m_aspectRatio(aspectRatio), m_camera(-m_aspectRatio * m_zoomLevel, m_aspectRatio* m_zoomLevel, -m_zoomLevel, m_zoomLevel), m_rotation(rotation)
 	{
 
 	}
 
-	void OrthographicCameraController::OnUpdate(TimeStep ts)
+	void Camera2DController::OnUpdate(TimeStep ts)
 	{
 		VLM_PROFILE_FUNCTION();
 
@@ -60,16 +60,16 @@ namespace Volum
 		m_cameraTranslationSpeed = 3.0f * m_zoomLevel;
 	}
 
-	void OrthographicCameraController::OnEvent(Event& e)
+	void Camera2DController::OnEvent(Event& e)
 	{
 		VLM_PROFILE_FUNCTION();
 
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<MouseScrolledEvent>(VLM_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
-		dispatcher.Dispatch<WindowResizeEvent>(VLM_BIND_EVENT_FN(OrthographicCameraController::OnWindowResize));
+		dispatcher.Dispatch<MouseScrolledEvent>(VLM_BIND_EVENT_FN(Camera2DController::OnMouseScrolled));
+		dispatcher.Dispatch<WindowResizeEvent>(VLM_BIND_EVENT_FN(Camera2DController::OnWindowResize));
 	}
 
-	void OrthographicCameraController::Resize(float width, float height)
+	void Camera2DController::Resize(float width, float height)
 	{
 		VLM_PROFILE_FUNCTION();
 
@@ -77,7 +77,7 @@ namespace Volum
 		m_camera.SetProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
 	}
 
-	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
+	bool Camera2DController::OnMouseScrolled(MouseScrolledEvent& e)
 	{
 		VLM_PROFILE_FUNCTION();
 
@@ -89,7 +89,7 @@ namespace Volum
 		return false;
 	}
 
-	bool OrthographicCameraController::OnWindowResize(WindowResizeEvent& e)
+	bool Camera2DController::OnWindowResize(WindowResizeEvent& e)
 	{
 		VLM_PROFILE_FUNCTION();
 

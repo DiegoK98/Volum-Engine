@@ -13,7 +13,8 @@
 #include "Volum/Core/Input.h"
 #include "Volum/Core/MouseCodes.h"
 #include "Volum/Core/KeyCodes.h"
-#include "Volum/Renderer/OrthographicCameraController.h"
+#include "Volum/Renderer/Camera2DController.h"
+#include "Volum/Renderer/Camera3DController.h"
 
 #include "Volum/ImGui/ImGuiLayer.h"
 

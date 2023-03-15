@@ -18,7 +18,7 @@ namespace Volum
 		virtual void OnEvent(Event& event) override;
 
 	private:
-		OrthographicCameraController m_cameraController;
+		Camera2DController m_cameraController;
 
 		// Temp
 		Ref<VertexArray> m_squareVA;

@@ -110,7 +110,7 @@ namespace Volum
 		delete[] s_data.QuadVertexBufferBase;
 	}
 
-	void Renderer3D::BeginScene(const OrthographicCamera& camera)
+	void Renderer3D::BeginScene(const PerspectiveCamera& camera)
 	{
 		VLM_PROFILE_FUNCTION();
 

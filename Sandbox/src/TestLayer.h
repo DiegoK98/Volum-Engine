@@ -23,7 +23,7 @@ private:
 	Volum::Ref<Volum::Texture2D> m_texture;
 	Volum::Ref<Volum::Texture2D> m_textureLeaves;
 
-	Volum::OrthographicCameraController m_cameraController;
+	Volum::Camera2DController m_cameraController;
 
 	glm::vec3 m_trianglePosition = { 0.0f, 0.0f, 0.0f };
 	float m_triangleMoveSpeed = 1.0f;
