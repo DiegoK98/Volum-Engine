@@ -39,11 +39,13 @@ namespace Volum
 		uint32_t TextureSlotIndex = 1; // 0 = white texture
 
 		glm::vec4 QuadVertexPositions[4];
+		glm::vec4 CubeVertexPositions[24];
 
 		Renderer3D::Statistics Stats;
 	};
 
 	static Renderer3DData s_data;
+	static const float s_standardQuadWidth = 1.0f;
 
 	void Renderer3D::Init()
 	{
@@ -97,10 +99,46 @@ namespace Volum
 
 		s_data.TextureSlots[0] = s_data.WhiteTexture;
 
-		s_data.QuadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f};
-		s_data.QuadVertexPositions[1] = {  0.5f, -0.5f, 0.0f, 1.0f};
-		s_data.QuadVertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f};
-		s_data.QuadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f};
+		s_data.QuadVertexPositions[0] = { -0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, 0.0f, 1.0f };
+		s_data.QuadVertexPositions[1] = {  0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, 0.0f, 1.0f };
+		s_data.QuadVertexPositions[2] = {  0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, 0.0f, 1.0f };
+		s_data.QuadVertexPositions[3] = { -0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, 0.0f, 1.0f };
+
+		// Front face
+		s_data.CubeVertexPositions[0] = { -0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, 1.0f };
+		s_data.CubeVertexPositions[1] = {  0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, 1.0f };
+		s_data.CubeVertexPositions[2] = {  0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, 1.0f };
+		s_data.CubeVertexPositions[3] = { -0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, 1.0f };
+
+		// Back face
+		s_data.CubeVertexPositions[4] = { -0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, 1.0f };
+		s_data.CubeVertexPositions[5] = {  0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, 1.0f };
+		s_data.CubeVertexPositions[6] = {  0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, 1.0f };
+		s_data.CubeVertexPositions[7] = { -0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, 1.0f };
+
+		// Left face
+		s_data.CubeVertexPositions[8] =  { -0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, 1.0f };
+		s_data.CubeVertexPositions[9] =  { -0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, 1.0f };
+		s_data.CubeVertexPositions[10] = { -0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, 1.0f };
+		s_data.CubeVertexPositions[11] = { -0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, 1.0f };
+
+		// Right face
+		s_data.CubeVertexPositions[12] = {  0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, 1.0f };
+		s_data.CubeVertexPositions[13] = {  0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, 1.0f };
+		s_data.CubeVertexPositions[14] = {  0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, 1.0f };
+		s_data.CubeVertexPositions[15] = {  0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, 1.0f };
+
+		// Up face
+		s_data.CubeVertexPositions[16] = { -0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, 1.0f };
+		s_data.CubeVertexPositions[17] = {  0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, 1.0f };
+		s_data.CubeVertexPositions[18] = {  0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, 1.0f };
+		s_data.CubeVertexPositions[19] = { -0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, 1.0f };
+
+		// Down face
+		s_data.CubeVertexPositions[20] = { -0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, 1.0f };
+		s_data.CubeVertexPositions[21] = {  0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth,  0.5f * s_standardQuadWidth, 1.0f };
+		s_data.CubeVertexPositions[22] = {  0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, 1.0f };
+		s_data.CubeVertexPositions[23] = { -0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, -0.5f * s_standardQuadWidth, 1.0f };
 	}
 
 	void Renderer3D::Shutdown()
@@ -312,6 +350,190 @@ namespace Volum
 
 		s_data.QuadIndexCount += 6;
 		s_data.Stats.QuadCount++;
+	}
+
+	void Renderer3D::DrawCube(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
+	{
+		VLM_PROFILE_FUNCTION();
+
+		constexpr size_t cubeVertexCount = 24; // We differentiate each quad, this is for the texcoords, so it looks good
+		constexpr glm::vec2 textureCoords[] = {
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f }
+		};
+		const float textureIndex = 0.0f;
+		const float textureTilingFactor = 1.0f;
+
+		if (s_data.QuadIndexCount >= Renderer3DData::MaxIndicesPerDraw)
+			FlushAndReset();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+		for (size_t i = 0; i < cubeVertexCount; i++)
+		{
+			s_data.QuadVertexBufferPtr->Position = transform * s_data.CubeVertexPositions[i];
+			s_data.QuadVertexBufferPtr->Color = color;
+			s_data.QuadVertexBufferPtr->TexCoords = textureCoords[i];
+			s_data.QuadVertexBufferPtr->TexIndex = textureIndex;
+			s_data.QuadVertexBufferPtr->TexTilingFactor = textureTilingFactor;
+			s_data.QuadVertexBufferPtr++;
+		}
+
+		s_data.QuadIndexCount += 36;
+		s_data.Stats.CubeCount++;
+	}
+
+	void Renderer3D::DrawCube(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float textureTilingFactor, glm::vec4 tintColor)
+	{
+		VLM_PROFILE_FUNCTION();
+
+		constexpr size_t cubeVertexCount = 24;
+		constexpr glm::vec2 textureCoords[] = {
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f }
+		};
+
+		if (s_data.QuadIndexCount >= Renderer3DData::MaxIndicesPerDraw)
+			FlushAndReset();
+
+		float textureIndex = 0.0f;
+		for (uint32_t i = 1; i < s_data.TextureSlotIndex; i++)
+		{
+			if (*s_data.TextureSlots[i].get() == *texture.get())
+			{
+				textureIndex = (float)i;
+			}
+		}
+
+		if (textureIndex == 0.0f)
+		{
+			if (s_data.TextureSlotIndex >= Renderer3DData::MaxTextureSlotsPerDraw)
+				FlushAndReset();
+
+			textureIndex = (float)s_data.TextureSlotIndex;
+			s_data.TextureSlots[s_data.TextureSlotIndex] = texture;
+			s_data.TextureSlotIndex++;
+		}
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+		for (size_t i = 0; i < cubeVertexCount; i++)
+		{
+			s_data.QuadVertexBufferPtr->Position = transform * s_data.CubeVertexPositions[i];
+			s_data.QuadVertexBufferPtr->Color = tintColor;
+			s_data.QuadVertexBufferPtr->TexCoords = textureCoords[i];
+			s_data.QuadVertexBufferPtr->TexIndex = textureIndex;
+			s_data.QuadVertexBufferPtr->TexTilingFactor = textureTilingFactor;
+			s_data.QuadVertexBufferPtr++;
+		}
+
+		s_data.QuadIndexCount += 36;
+		s_data.Stats.CubeCount++;
+	}
+
+	void Renderer3D::DrawRotatedCube(const glm::vec3& position, const glm::vec3& rotation, const glm::vec2& size, const glm::vec4& color)
+	{
+		VLM_PROFILE_FUNCTION();
+
+		if (s_data.QuadIndexCount >= Renderer3DData::MaxIndicesPerDraw)
+			FlushAndReset();
+
+		constexpr size_t cubeVertexCount = 24;
+		constexpr glm::vec2 textureCoords[] = {
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f }
+		};
+		const float textureIndex = 0.0f;
+		const float textureTilingFactor = 1.0f;
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::rotate(glm::mat4(1.0f), rotation.x, { 1.0f, 0.0f, 0.0f }) // x
+			* glm::rotate(glm::mat4(1.0f), rotation.y, { 0.0f, 1.0f, 0.0f }) // y
+			* glm::rotate(glm::mat4(1.0f), rotation.z, { 0.0f, 0.0f, 1.0f }) // z
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+		for (size_t i = 0; i < cubeVertexCount; i++)
+		{
+			s_data.QuadVertexBufferPtr->Position = transform * s_data.CubeVertexPositions[i];
+			s_data.QuadVertexBufferPtr->Color = color;
+			s_data.QuadVertexBufferPtr->TexCoords = textureCoords[i];
+			s_data.QuadVertexBufferPtr->TexIndex = textureIndex;
+			s_data.QuadVertexBufferPtr->TexTilingFactor = textureTilingFactor;
+			s_data.QuadVertexBufferPtr++;
+		}
+
+		s_data.QuadIndexCount += 36;
+		s_data.Stats.CubeCount++;
+	}
+
+	void Renderer3D::DrawRotatedCube(const glm::vec3& position, const glm::vec3& rotation, const glm::vec2& size, const Ref<Texture2D>& texture, float textureTilingFactor, glm::vec4 tintColor)
+	{
+		VLM_PROFILE_FUNCTION();
+
+		constexpr size_t cubeVertexCount = 24;
+		constexpr glm::vec2 textureCoords[] = {
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f },
+			{ 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f }
+		};
+
+		if (s_data.QuadIndexCount >= Renderer3DData::MaxIndicesPerDraw)
+			FlushAndReset();
+
+		float textureIndex = 0.0f;
+		for (uint32_t i = 1; i < s_data.TextureSlotIndex; i++)
+		{
+			if (*s_data.TextureSlots[i].get() == *texture.get())
+			{
+				textureIndex = (float)i;
+			}
+		}
+
+		if (textureIndex == 0.0f)
+		{
+			if (s_data.TextureSlotIndex >= Renderer3DData::MaxTextureSlotsPerDraw)
+				FlushAndReset();
+
+			textureIndex = (float)s_data.TextureSlotIndex;
+			s_data.TextureSlots[s_data.TextureSlotIndex] = texture;
+			s_data.TextureSlotIndex++;
+		}
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::rotate(glm::mat4(1.0f), rotation.x, { 1.0f, 0.0f, 0.0f }) // x
+			* glm::rotate(glm::mat4(1.0f), rotation.y, { 0.0f, 1.0f, 0.0f }) // y
+			* glm::rotate(glm::mat4(1.0f), rotation.z, { 0.0f, 0.0f, 1.0f }) // z
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+		for (size_t i = 0; i < cubeVertexCount; i++)
+		{
+			s_data.QuadVertexBufferPtr->Position = transform * s_data.CubeVertexPositions[i];
+			s_data.QuadVertexBufferPtr->Color = tintColor;
+			s_data.QuadVertexBufferPtr->TexCoords = textureCoords[i];
+			s_data.QuadVertexBufferPtr->TexIndex = textureIndex;
+			s_data.QuadVertexBufferPtr->TexTilingFactor = textureTilingFactor;
+			s_data.QuadVertexBufferPtr++;
+		}
+
+		s_data.QuadIndexCount += 36;
+		s_data.Stats.CubeCount++;
 	}
 
 	void Renderer3D::ResetStats()

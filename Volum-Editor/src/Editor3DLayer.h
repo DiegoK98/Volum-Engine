@@ -32,7 +32,7 @@ namespace Volum
 		bool m_viewportHovered = false;
 		glm::vec2 m_viewportSize = { 0.0f, 0.0f };
 
-		glm::vec4 m_squareColor = { 0.3f, 0.2f, 0.8f, 1.0f };
+		glm::vec4 m_cubeColor = { 0.3f, 0.2f, 0.8f, 1.0f };
 		glm::vec4 m_checkerboardTintColor = { 0.8f, 0.2f, 0.3f, 1.0f };
 		float m_tilingFactor = 1.0f;
 	};

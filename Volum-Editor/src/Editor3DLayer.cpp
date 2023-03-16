@@ -67,22 +67,13 @@ namespace Volum
 			Renderer3D::BeginScene(m_cameraController.GetCamera());
 
 			// Opaque objects
-			Renderer3D::DrawQuad({ -1.0f, -1.0f, -1.0f }, { 1.0f, 1.0f }, m_squareColor);
-			Renderer3D::DrawQuad({ 0.0f, 0.0f, -5.0f }, { 20.0f, 20.0f }, m_checkerboardTexture, m_tilingFactor, m_checkerboardTintColor);
-
-			for (float y = -5.0f; y < 5.0f; y += 0.5f)
-			{
-				for (float x = -5.0f; x < 5.0f; x += 0.5f)
-				{
-					glm::vec3 color = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f };
-					Renderer3D::DrawQuad({ x, y, -2.0f }, { 0.45f, 0.45f }, { color, 1.0f });
-				}
-			}
+			Renderer3D::DrawRotatedQuad({ 0.0f, -2.0f, -5.0f }, { glm::radians(90.0f), 0.0f, 0.0f}, { 50.0f, 50.0f }, m_checkerboardTexture, m_tilingFactor, m_checkerboardTintColor);
+			Renderer3D::DrawRotatedCube({ 1.0f, 0.0f, -3.0f }, { rotation, rotation, 0.0f }, { 1.0f, 1.0f }, m_checkerboardTexture, 1.0f, { 0.6f, 0.1f, 0.8f, 0.5f });
 
 			// Transparent objects
 			Renderer3D::DrawQuad({ 5.0f, -1.0f, -1.25f }, { 1.0f, 1.0f }, m_leavesTexture);
 			Renderer3D::DrawQuad({ -2.0f, 2.0f, -1.25f }, { 1.0f, 1.0f }, m_leavesTexture);
-			Renderer3D::DrawRotatedQuad({ 4.0f, -1.0f, -0.5f }, { 0.0f, 0.0f, rotation}, { 1.0f, 1.0f }, m_leavesTexture);
+			Renderer3D::DrawRotatedQuad({ 4.0f, -1.0f, -0.5f }, { 0.0f, 0.0f, rotation }, { 1.0f, 1.0f }, m_leavesTexture);
 			Renderer3D::DrawQuad({ 0.5f, -0.5f, -1.0f }, { 2.0f, 0.3f }, { 0.2f, 0.6f, 0.1f, 0.6f });
 
 			Renderer3D::EndScene();
@@ -146,7 +137,7 @@ namespace Volum
 		}
 
 		ImGui::Begin("Settings");
-		ImGui::ColorEdit4("Square color", glm::value_ptr(m_squareColor));
+		ImGui::ColorEdit4("Square color", glm::value_ptr(m_cubeColor));
 		ImGui::ColorEdit4("Checkerboard tint color", glm::value_ptr(m_checkerboardTintColor));
 		ImGui::DragFloat("Checkerboard tiling factor", &m_tilingFactor, 1.0f, 0.5f, 50.0f);
 		ImGui::End();
@@ -155,6 +146,7 @@ namespace Volum
 		auto stats = Renderer3D::GetStats();
 		ImGui::Text("Draw Calls: %d", stats.DrawCallsCount);
 		ImGui::Text("Quads: %d", stats.QuadCount);
+		ImGui::Text("Cubes: %d", stats.CubeCount);
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 		ImGui::End();
