@@ -25,6 +25,10 @@ namespace Volum
 		Ref<Shader> m_flatColorShader;
 		Ref<Framebuffer> m_framebuffer;
 
+		Ref<Scene> m_activeScene;
+
+		entt::entity m_cubeEntity;
+
 		Ref<Texture2D> m_checkerboardTexture;
 		Ref<Texture2D> m_leavesTexture;
 
@@ -32,7 +36,7 @@ namespace Volum
 		bool m_viewportHovered = false;
 		glm::vec2 m_viewportSize = { 0.0f, 0.0f };
 
-		glm::vec4 m_cubeColor = { 0.3f, 0.2f, 0.8f, 1.0f };
+		const glm::vec4 m_cubeColor = { 0.6f, 0.1f, 0.8f, 0.5f };
 		glm::vec4 m_checkerboardTintColor = { 0.8f, 0.2f, 0.3f, 1.0f };
 		float m_tilingFactor = 1.0f;
 	};

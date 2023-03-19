@@ -24,6 +24,13 @@ namespace Volum
 		framebufferSpec.Height = 720;
 
 		m_framebuffer = Framebuffer::Create(framebufferSpec);
+
+		m_activeScene = CreateRef<Scene>();
+
+		m_cubeEntity = m_activeScene->CreateEntity();
+		m_activeScene->Reg().emplace<TransformComponent>(m_cubeEntity);
+		m_activeScene->Reg().emplace<MeshComponent>(m_cubeEntity, CUBE);
+		m_activeScene->Reg().emplace<MaterialComponent>(m_cubeEntity, m_cubeColor);
 	}
 
 	void Editor3DLayer::OnDetach()
@@ -36,7 +43,7 @@ namespace Volum
 		VLM_PROFILE_FUNCTION();
 
 		// Resize
-		if (Volum::FramebufferSpecification spec = m_framebuffer->GetSpecification();
+		if (FramebufferSpecification spec = m_framebuffer->GetSpecification();
 			m_viewportSize.x > 0.0f && m_viewportSize.y > 0.0f && // zero sized framebuffer is invalid
 			(spec.Width != m_viewportSize.x || spec.Height != m_viewportSize.y))
 		{
@@ -44,41 +51,25 @@ namespace Volum
 			m_cameraController.Resize(m_viewportSize.x, m_viewportSize.y);
 		}
 
-		// Update
 		if (m_viewportFocused)
 			m_cameraController.OnUpdate(ts);
-
-		// Render
+		
+		// Draw preparation
 		Renderer3D::ResetStats();
-		{
-			VLM_PROFILE_SCOPE("Renderer Prep");
 
-			m_framebuffer->Bind();
-			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-			RenderCommand::Clear();
-		}
+		m_framebuffer->Bind();
+		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+		RenderCommand::Clear();
+		
+		// Draw
+		Renderer3D::BeginScene(m_cameraController.GetCamera());
 
-		{
-			VLM_PROFILE_SCOPE("Renderer Draw");
+		// Update scene
+		m_activeScene->OnUpdate(ts);
 
-			static float rotation = 0.0f;
-			rotation += ts * 1.0f;
-
-			Renderer3D::BeginScene(m_cameraController.GetCamera());
-
-			// Opaque objects
-			Renderer3D::DrawRotatedQuad({ 0.0f, -2.0f, -5.0f }, { glm::radians(90.0f), 0.0f, 0.0f}, { 50.0f, 50.0f }, m_checkerboardTexture, m_tilingFactor, m_checkerboardTintColor);
-			Renderer3D::DrawRotatedCube({ 1.0f, 0.0f, -3.0f }, { rotation, rotation, 0.0f }, { 1.0f, 1.0f }, m_checkerboardTexture, 1.0f, { 0.6f, 0.1f, 0.8f, 0.5f });
-
-			// Transparent objects
-			Renderer3D::DrawQuad({ 5.0f, -1.0f, -1.25f }, { 1.0f, 1.0f }, m_leavesTexture);
-			Renderer3D::DrawQuad({ -2.0f, 2.0f, -1.25f }, { 1.0f, 1.0f }, m_leavesTexture);
-			Renderer3D::DrawRotatedQuad({ 4.0f, -1.0f, -0.5f }, { 0.0f, 0.0f, rotation }, { 1.0f, 1.0f }, m_leavesTexture);
-			Renderer3D::DrawQuad({ 0.5f, -0.5f, -1.0f }, { 2.0f, 0.3f }, { 0.2f, 0.6f, 0.1f, 0.6f });
-
-			Renderer3D::EndScene();
-			m_framebuffer->Unbind();
-		}
+		// End of draw
+		Renderer3D::EndScene();
+		m_framebuffer->Unbind();
 	}
 
 	void Editor3DLayer::OnImGuiRender()
@@ -137,7 +128,8 @@ namespace Volum
 		}
 
 		ImGui::Begin("Settings");
-		ImGui::ColorEdit4("Square color", glm::value_ptr(m_cubeColor));
+		auto& cubeColor = m_activeScene->Reg().get<MaterialComponent>(m_cubeEntity).Color;
+		ImGui::ColorEdit4("Cube color", glm::value_ptr(cubeColor));
 		ImGui::ColorEdit4("Checkerboard tint color", glm::value_ptr(m_checkerboardTintColor));
 		ImGui::DragFloat("Checkerboard tiling factor", &m_tilingFactor, 1.0f, 0.5f, 50.0f);
 		ImGui::End();

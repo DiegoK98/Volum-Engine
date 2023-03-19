@@ -23,6 +23,7 @@ IncludeDir["Glad"] = "Volum/vendor/Glad/include"
 IncludeDir["ImGui"] = "Volum/vendor/ImGui"
 IncludeDir["glm"] = "Volum/vendor/glm"
 IncludeDir["stb_image"] = "Volum/vendor/stb_image"
+IncludeDir["entt"] = "Volum/vendor/entt/include"
 
 group "Dependencies"
     include "Volum/vendor/GLFW"
@@ -68,6 +69,7 @@ project "Volum"
         "%{IncludeDir.ImGui}",
         "%{IncludeDir.glm}",
         "%{IncludeDir.stb_image}",
+        "%{IncludeDir.entt}"
     }
 
     links
@@ -119,7 +121,8 @@ project "Volum-Editor"
         "Volum/vendor/spdlog/include",
         "Volum/src",
         "Volum/vendor",
-        "%{IncludeDir.glm}"
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.entt}"
     }
 
     links
@@ -166,7 +169,8 @@ project "Sandbox"
         "Volum/vendor/spdlog/include",
         "Volum/src",
         "Volum/vendor",
-        "%{IncludeDir.glm}"
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.entt}"
     }
 
     links
