@@ -27,7 +27,7 @@ namespace Volum
 
 		Ref<Scene> m_activeScene;
 
-		entt::entity m_cubeEntity;
+		Entity m_cubeEntity;
 
 		Ref<Texture2D> m_checkerboardTexture;
 		Ref<Texture2D> m_leavesTexture;

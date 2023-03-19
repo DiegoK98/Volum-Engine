@@ -27,10 +27,9 @@ namespace Volum
 
 		m_activeScene = CreateRef<Scene>();
 
-		m_cubeEntity = m_activeScene->CreateEntity();
-		m_activeScene->Reg().emplace<TransformComponent>(m_cubeEntity);
-		m_activeScene->Reg().emplace<MeshComponent>(m_cubeEntity, CUBE);
-		m_activeScene->Reg().emplace<MaterialComponent>(m_cubeEntity, m_cubeColor);
+		m_cubeEntity = m_activeScene->CreateEntity("Color-changing Cube");
+		m_cubeEntity.AddComponent<MeshComponent>(CUBE);
+		m_cubeEntity.AddComponent<MaterialComponent>(m_cubeColor);
 	}
 
 	void Editor3DLayer::OnDetach()
@@ -128,8 +127,17 @@ namespace Volum
 		}
 
 		ImGui::Begin("Settings");
-		auto& cubeColor = m_activeScene->Reg().get<MaterialComponent>(m_cubeEntity).Color;
-		ImGui::ColorEdit4("Cube color", glm::value_ptr(cubeColor));
+		if (m_cubeEntity)
+		{
+			ImGui::Separator();
+			ImGui::Text("%s", m_cubeEntity.GetComponent<TagComponent>().Tag.c_str());
+
+			auto& cubeColor = m_cubeEntity.GetComponent<MaterialComponent>().Color;
+			ImGui::ColorEdit4("Cube color", glm::value_ptr(cubeColor));
+		}
+
+		ImGui::Separator();
+		ImGui::Text("Other properties");
 		ImGui::ColorEdit4("Checkerboard tint color", glm::value_ptr(m_checkerboardTintColor));
 		ImGui::DragFloat("Checkerboard tiling factor", &m_tilingFactor, 1.0f, 0.5f, 50.0f);
 		ImGui::End();

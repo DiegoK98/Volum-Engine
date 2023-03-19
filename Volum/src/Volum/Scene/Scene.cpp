@@ -4,6 +4,7 @@
 
 #include "Volum/Renderer/Renderer2D.h"
 #include "Volum/Renderer/Renderer3D.h"
+#include "Entity.h"
 
 #include <glm/glm.hpp>
 
@@ -18,9 +19,15 @@ namespace Volum
 	{
 	}
 
-	entt::entity Scene::CreateEntity()
+	Entity Scene::CreateEntity(const std::string& name)
 	{
-		return m_registry.create();
+		Entity entity = { m_registry.create(), this };
+		
+		entity.AddComponent<TransformComponent>();
+		auto& tag = entity.AddComponent<TagComponent>(name);
+		tag = name.empty() ? "Unnamed Entity" : name;
+
+		return entity;
 	}
 
 	void Scene::OnUpdate(TimeStep ts)

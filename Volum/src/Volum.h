@@ -19,6 +19,7 @@
 #include "Volum/ImGui/ImGuiLayer.h"
 
 #include "Volum/Scene/Scene.h"
+#include "Volum/Scene/Entity.h"
 #include "Volum/Scene/Components.h"
 
 // ---------Renderer---------
