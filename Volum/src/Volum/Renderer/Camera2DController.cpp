@@ -69,7 +69,7 @@ namespace Volum
 		dispatcher.Dispatch<WindowResizeEvent>(VLM_BIND_EVENT_FN(Camera2DController::OnWindowResize));
 	}
 
-	void Camera2DController::Resize(float width, float height)
+	void Camera2DController::OnResize(float width, float height)
 	{
 		VLM_PROFILE_FUNCTION();
 
@@ -93,7 +93,7 @@ namespace Volum
 	{
 		VLM_PROFILE_FUNCTION();
 
-		Resize((float)e.GetWidth(), (float)e.GetHeight());
+		OnResize((float)e.GetWidth(), (float)e.GetHeight());
 
 		return false;
 	}

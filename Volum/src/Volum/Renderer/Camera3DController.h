@@ -16,7 +16,7 @@ namespace Volum
 
 		void OnUpdate(TimeStep ts);
 		void OnEvent(Event& e);
-		void Resize(float width, float height);
+		void OnResize(float width, float height);
 
 		const PerspectiveCamera& GetCamera() const { return m_camera; }
 		PerspectiveCamera& GetCamera() { return m_camera; }

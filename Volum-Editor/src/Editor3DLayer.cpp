@@ -63,7 +63,7 @@ namespace Volum
 			(spec.Width != m_viewportSize.x || spec.Height != m_viewportSize.y))
 		{
 			m_framebuffer->Resize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
-			m_cameraController.Resize(m_viewportSize.x, m_viewportSize.y);
+			m_cameraController.OnResize(m_viewportSize.x, m_viewportSize.y);
 		}
 
 		if (m_viewportFocused)
