@@ -32,21 +32,51 @@ namespace Volum
 
 	void Scene::OnUpdate(TimeStep ts)
 	{
-		auto spritesGroup = m_registry.group<SpriteRendererComponent>(entt::get<TransformComponent>);
-		for (auto entity : spritesGroup)
+		Camera* mainCamera = nullptr;
+		glm::mat4* cameraTransform;
 		{
-			auto [transform, sprite] = spritesGroup.get<TransformComponent, SpriteRendererComponent>(entity);
+			auto group = m_registry.group<CameraComponent>(entt::get<TransformComponent>);
+			for (auto entity : group)
+			{
+				auto [transform, camera] = group.get<TransformComponent, CameraComponent>(entity);
 
-			Renderer3D::DrawQuad(transform, sprite.Color);
+				if (camera.Main)
+				{
+					mainCamera = &camera.Camera;
+					cameraTransform = &transform.Transform;
+					break;
+				}
+			}
 		}
 
-		auto cubesGroup = m_registry.group<MeshComponent>(entt::get<TransformComponent, MaterialComponent>);
-		for (auto entity : cubesGroup)
+		if (mainCamera)
 		{
-			auto [transform, mesh, material] = cubesGroup.get<TransformComponent, MeshComponent, MaterialComponent>(entity);
+			Renderer3D::BeginScene(*mainCamera, *cameraTransform);
 
-			if (mesh.MeshType == CUBE)
-				Renderer3D::DrawCube(transform, material.Color);
+			// Render sprites
+			{
+				auto group = m_registry.group<SpriteRendererComponent>(entt::get<TransformComponent>);
+				for (auto entity : group)
+				{
+					auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+
+					Renderer3D::DrawQuad(transform, sprite.Color);
+				}
+			}
+
+			// Render meshes
+			{
+				auto group = m_registry.group<MeshComponent, MaterialComponent>(entt::get<TransformComponent>);
+				for (auto entity : group)
+				{
+					auto [transform, mesh, material] = group.get<TransformComponent, MeshComponent, MaterialComponent>(entity);
+
+					if (mesh.MeshType == CUBE)
+						Renderer3D::DrawCube(transform, material.Color);
+				}
+			}
+
+			Renderer3D::EndScene();
 		}
 	}
 }

@@ -30,6 +30,22 @@ namespace Volum
 		m_cubeEntity = m_activeScene->CreateEntity("Color-changing Cube");
 		m_cubeEntity.AddComponent<MeshComponent>(CUBE);
 		m_cubeEntity.AddComponent<MaterialComponent>(m_cubeColor);
+
+		m_mainCameraEntity = m_activeScene->CreateEntity("Main camera");
+		{
+			auto& cc = m_mainCameraEntity.AddComponent<CameraComponent>(glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 1000.0f));
+			cc.Main = !m_secondCamera;
+		}
+
+		m_mainCameraEntity.GetComponent<TransformComponent>().Transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 2.0f });
+
+		m_secondCameraEntity = m_activeScene->CreateEntity("Second camera");
+		{
+			auto& cc = m_secondCameraEntity.AddComponent<CameraComponent>(glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 1000.0f));
+			cc.Main = m_secondCamera;
+		}
+
+		m_secondCameraEntity.GetComponent<TransformComponent>().Transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, -8.0f });
 	}
 
 	void Editor3DLayer::OnDetach()
@@ -60,14 +76,10 @@ namespace Volum
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RenderCommand::Clear();
 		
-		// Draw
-		Renderer3D::BeginScene(m_cameraController.GetCamera());
-
-		// Update scene
+		// Update scene (Draw)
 		m_activeScene->OnUpdate(ts);
 
-		// End of draw
-		Renderer3D::EndScene();
+		// End of Draw
 		m_framebuffer->Unbind();
 	}
 
@@ -127,6 +139,26 @@ namespace Volum
 		}
 
 		ImGui::Begin("Settings");
+
+		if (ImGui::Checkbox("Render second camera", &m_secondCamera))
+		{
+			m_mainCameraEntity.GetComponent<CameraComponent>().Main = !m_secondCamera;
+			m_secondCameraEntity.GetComponent<CameraComponent>().Main = m_secondCamera;
+		}
+
+		ImGui::Separator();
+		auto& name = m_mainCameraEntity.GetComponent<TagComponent>().Tag;
+		ImGui::Text("%s", name.c_str());
+		ImGui::DragFloat3((name + " position").c_str(), glm::value_ptr(m_mainCameraEntity.GetComponent<TransformComponent>().Transform[3]));
+
+		if (m_secondCameraEntity)
+		{
+			ImGui::Separator();
+			auto& name = m_secondCameraEntity.GetComponent<TagComponent>().Tag;
+			ImGui::Text("%s", name.c_str());
+			ImGui::DragFloat3((name + " position").c_str(), glm::value_ptr(m_secondCameraEntity.GetComponent<TransformComponent>().Transform[3]));
+		}
+
 		if (m_cubeEntity)
 		{
 			ImGui::Separator();

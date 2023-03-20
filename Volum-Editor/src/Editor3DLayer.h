@@ -28,9 +28,13 @@ namespace Volum
 		Ref<Scene> m_activeScene;
 
 		Entity m_cubeEntity;
+		Entity m_mainCameraEntity;
+		Entity m_secondCameraEntity;
 
 		Ref<Texture2D> m_checkerboardTexture;
 		Ref<Texture2D> m_leavesTexture;
+
+		bool m_secondCamera = false;
 
 		bool m_viewportFocused = false;
 		bool m_viewportHovered = false;

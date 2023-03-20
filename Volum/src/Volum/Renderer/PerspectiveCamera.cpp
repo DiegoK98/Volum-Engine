@@ -7,9 +7,11 @@
 namespace Volum
 {
 	PerspectiveCamera::PerspectiveCamera(float fovY, float aspectRatio, float zNear, float zFar)
-		: Camera(glm::perspective(glm::radians(fovY), aspectRatio, zNear, zFar), glm::mat4(1.0f)), m_position(0.0f), m_rotation(0.0f)
+		: m_projectionMatrix(glm::perspective(glm::radians(fovY), aspectRatio, zNear, zFar)), m_viewMatrix(glm::mat4(1.0f)), m_position(0.0f), m_rotation(0.0f)
 	{
 		VLM_PROFILE_FUNCTION();
+
+		m_viewProjMatrix = m_projectionMatrix * m_viewMatrix;
 	}
 
 	void PerspectiveCamera::SetProjection(float fovY, float aspectRatio, float zNear, float zFar)

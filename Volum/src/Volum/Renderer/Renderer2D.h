@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Volum/Renderer/Camera.h"
 #include "Volum/Renderer/OrthographicCamera.h"
 #include "Volum/Renderer/Texture.h"
 
@@ -11,7 +12,8 @@ namespace Volum
 		static void Init();
 		static void Shutdown();
 
-		static void BeginScene(const OrthographicCamera& camera);
+		static void BeginScene(const Camera& camera, glm::mat4& transform);
+		static void BeginScene(const OrthographicCamera& camera); // TODO: Remove
 		static void EndScene();
 		static void Flush();
 

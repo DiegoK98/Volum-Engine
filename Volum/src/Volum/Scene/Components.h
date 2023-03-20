@@ -2,6 +2,8 @@
 
 #include <glm/glm.hpp>
 
+#include "Volum/Renderer/Camera.h"
+
 namespace Volum
 {
 	enum MeshFilter
@@ -34,6 +36,17 @@ namespace Volum
 		TagComponent(const TagComponent&) = default;
 		TagComponent(const std::string& tag)
 			: Tag(tag) {}
+	};
+
+	struct CameraComponent
+	{
+		Camera Camera;
+		bool Main = true; // TODO: Scene should handle this
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
+		CameraComponent(const glm::mat4& proj)
+			: Camera(proj) {}
 	};
 
 	struct SpriteRendererComponent

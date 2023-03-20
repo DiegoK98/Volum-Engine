@@ -148,6 +148,28 @@ namespace Volum
 		delete[] s_data.QuadVertexBufferBase;
 	}
 
+	void Renderer3D::BeginScene(const Camera& camera, glm::mat4& transform)
+	{
+		VLM_PROFILE_FUNCTION();
+
+		glm::mat4 viewProj = camera.GetProjectionMatrix() * glm::inverse(transform);
+
+		s_data.TextureShader->Bind();
+		s_data.TextureShader->SetMat4("u_viewProjMat", viewProj);
+
+		ResetData();
+	}
+
+	void Renderer3D::BeginScene(const OrthographicCamera& camera)
+	{
+		VLM_PROFILE_FUNCTION();
+
+		s_data.TextureShader->Bind();
+		s_data.TextureShader->SetMat4("u_viewProjMat", camera.GetViewProjectionMatrix());
+
+		ResetData();
+	}
+
 	void Renderer3D::BeginScene(const PerspectiveCamera& camera)
 	{
 		VLM_PROFILE_FUNCTION();
