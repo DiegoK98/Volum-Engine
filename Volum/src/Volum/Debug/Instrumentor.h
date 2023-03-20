@@ -28,15 +28,23 @@ namespace Volum {
 	class Instrumentor
 	{
 	private:
+		Instrumentor()
+			: m_currentSession(nullptr), m_profileCount(0)
+		{
+		}
+
+		~Instrumentor()
+		{
+			EndSession();
+		}
+
 		std::mutex m_Mutex;
 		InstrumentationSession* m_currentSession;
 		std::ofstream m_outputStream;
 		int m_profileCount;
 	public:
-		Instrumentor()
-			: m_currentSession(nullptr), m_profileCount(0)
-		{
-		}
+		Instrumentor(const Instrumentor&) = delete;
+		Instrumentor(Instrumentor&&) = delete;
 
 		void BeginSession(const std::string& name, const std::string& filepath = "results.json")
 		{
@@ -219,12 +227,16 @@ namespace Volum {
 #if VLM_PROFILER
 	#define VLM_PROFILE_BEGIN_SESSION(name, filepath) ::Volum::Instrumentor::Get().BeginSession(name, filepath)
 	#define VLM_PROFILE_END_SESSION() ::Volum::Instrumentor::Get().EndSession()
-	#define VLM_PROFILE_SCOPE(name) constexpr auto fixedName = ::Volum::InstrumentorUtils::CleanupOutputString(name, "__cdecl ");\
-									::Volum::InstrumentationTimer timer##__LINE__(fixedName);
+	#define VLM_PROFILE_SCOPE_LINE2(name, line) constexpr auto fixedName##line = ::Volum::InstrumentorUtils::CleanupOutputString(name, "__cdecl ");\
+											   ::Volum::InstrumentationTimer timer##line(fixedName##line)
+	#define VLM_PROFILE_SCOPE_LINE(name, line) VLM_PROFILE_SCOPE_LINE2(name, line)
+	#define VLM_PROFILE_SCOPE(name) VLM_PROFILE_SCOPE_LINE(name, __LINE__)
 	#define VLM_PROFILE_FUNCTION() VLM_PROFILE_SCOPE(VLM_FUNC_SIG)
 #else
 	#define VLM_PROFILE_BEGIN_SESSION(name, filepath)
 	#define VLM_PROFILE_END_SESSION()
+	#define VLM_PROFILE_SCOPE_LINE2(name, line)
+	#define VLM_PROFILE_SCOPE_LINE(name, line)
 	#define VLM_PROFILE_SCOPE(name)
 	#define VLM_PROFILE_FUNCTION()
 #endif
@@ -232,12 +244,16 @@ namespace Volum {
 #if VLM_RENDERER_PROFILER
 	#define VLM_RENDERER_PROFILE_BEGIN_SESSION(name, filepath) ::Volum::Instrumentor::Get().BeginSession(name, filepath)
 	#define VLM_RENDERER_PROFILE_END_SESSION() ::Volum::Instrumentor::Get().EndSession()
-	#define VLM_RENDERER_PROFILE_SCOPE(name) constexpr auto fixedName = ::Volum::InstrumentorUtils::CleanupOutputString(name, "__cdecl ");\
-											::Volum::InstrumentationTimer timer##__LINE__(fixedName);
+	#define VLM_RENDERER_PROFILE_SCOPE_LINE2(name, line) constexpr auto fixedName##line = ::Volum::InstrumentorUtils::CleanupOutputString(name, "__cdecl ");\
+											   ::Volum::InstrumentationTimer timer##line(fixedName##line)
+	#define VLM_RENDERER_PROFILE_SCOPE_LINE(name, line) VLM_RENDERER_PROFILE_SCOPE_LINE2(name, line)
+	#define VLM_RENDERER_PROFILE_SCOPE(name) VLM_RENDERER_PROFILE_SCOPE_LINE(name, __LINE__)
 	#define VLM_RENDERER_PROFILE_FUNCTION() VLM_RENDERER_PROFILE_SCOPE(VLM_FUNC_SIG)
 #else
 	#define VLM_RENDERER_PROFILE_BEGIN_SESSION(name, filepath)
 	#define VLM_RENDERER_PROFILE_END_SESSION()
+	#define VLM_RENDERER_PROFILE_SCOPE_LINE2(name, line)
+	#define VLM_RENDERER_PROFILE_SCOPE_LINE(name, line)
 	#define VLM_RENDERER_PROFILE_SCOPE(name)
 	#define VLM_RENDERER_PROFILE_FUNCTION()
 #endif
