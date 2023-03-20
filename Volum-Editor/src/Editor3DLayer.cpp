@@ -33,7 +33,7 @@ namespace Volum
 
 		m_mainCameraEntity = m_activeScene->CreateEntity("Main camera");
 		{
-			auto& cc = m_mainCameraEntity.AddComponent<CameraComponent>(glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 1000.0f));
+			auto& cc = m_mainCameraEntity.AddComponent<CameraComponent>();
 			cc.Main = !m_secondCamera;
 		}
 
@@ -41,11 +41,11 @@ namespace Volum
 
 		m_secondCameraEntity = m_activeScene->CreateEntity("Second camera");
 		{
-			auto& cc = m_secondCameraEntity.AddComponent<CameraComponent>(glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 1000.0f));
+			auto& cc = m_secondCameraEntity.AddComponent<CameraComponent>();
 			cc.Main = m_secondCamera;
 		}
 
-		m_secondCameraEntity.GetComponent<TransformComponent>().Transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, -8.0f });
+		m_secondCameraEntity.GetComponent<TransformComponent>().Transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 8.0f });
 	}
 
 	void Editor3DLayer::OnDetach()
@@ -64,6 +64,8 @@ namespace Volum
 		{
 			m_framebuffer->Resize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 			m_cameraController.OnResize(m_viewportSize.x, m_viewportSize.y);
+
+			m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 		}
 
 		if (m_viewportFocused)

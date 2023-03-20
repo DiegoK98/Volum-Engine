@@ -16,8 +16,11 @@ namespace Volum
 		RenderCommand::Init();
 
 		// Choose 2D or 3D
-		//Renderer2D::Init();
-		Renderer3D::Init();
+		#if VLM_RENDERER_3D
+			Renderer3D::Init();
+		#else
+			Renderer2D::Init();
+		#endif
 	}
 
 	void Renderer::Shutdown()

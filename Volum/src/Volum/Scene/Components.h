@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "Volum/Renderer/Camera.h"
+#include "SceneCamera.h"
 
 namespace Volum
 {
@@ -40,13 +40,12 @@ namespace Volum
 
 	struct CameraComponent
 	{
-		Camera Camera;
+		SceneCamera Camera;
 		bool Main = true; // TODO: Scene should handle this
+		bool FixedAspectRatio = false;
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
-		CameraComponent(const glm::mat4& proj)
-			: Camera(proj) {}
 	};
 
 	struct SpriteRendererComponent

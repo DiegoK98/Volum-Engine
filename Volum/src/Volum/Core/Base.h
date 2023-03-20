@@ -65,6 +65,8 @@
 
 #define VLM_BIND_EVENT_FN(fn) [this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...); }
 
+#define VLM_RENDERER_3D 1 // 0 = Renderer2D, 1 = Renderer3D
+
 namespace Volum
 {
 	template<typename T>
