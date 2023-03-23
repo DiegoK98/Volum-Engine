@@ -24,7 +24,7 @@ namespace Volum
 
 	Application* CreateApplication()
 	{
-		VLM_WARN("Created Test application");
+		VLM_INFO("Created Editor application");
 
 		return new VolumEditor();
 	}

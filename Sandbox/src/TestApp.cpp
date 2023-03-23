@@ -21,7 +21,7 @@ public:
 
 Volum::Application* Volum::CreateApplication()
 {
-	VLM_WARN("Created Test application");
+	VLM_INFO("Created Test application");
 
 	return new Test();
 }
