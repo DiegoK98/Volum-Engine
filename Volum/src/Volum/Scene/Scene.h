@@ -2,7 +2,6 @@
 
 #include "entt.hpp"
 
-#include "Components.h"
 #include "Volum/Core/TimeStep.h"
 
 namespace Volum

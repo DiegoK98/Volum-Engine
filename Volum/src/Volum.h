@@ -20,6 +20,7 @@
 
 #include "Volum/Scene/Scene.h"
 #include "Volum/Scene/Entity.h"
+#include "Volum/Scene/ScriptableEntity.h"
 #include "Volum/Scene/Components.h"
 
 // ---------Renderer---------

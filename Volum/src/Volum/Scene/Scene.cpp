@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 
+#include "Components.h"
 #include "Volum/Renderer/Renderer2D.h"
 #include "Volum/Renderer/Renderer3D.h"
 #include "Entity.h"
@@ -32,8 +33,24 @@ namespace Volum
 
 	void Scene::OnUpdate(TimeStep ts)
 	{
+		// Update scripts
+		{
+			m_registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+			{
+				// TODO: Move to Scene::OnScenePlay (Also, call OnDestroy in Scene::OnSceneStop)
+				if (!nsc.Instance)
+				{
+					nsc.Instance = nsc.InstantiateScript();
+					nsc.Instance->m_entity = Entity{ entity, this };
+					nsc.Instance->OnCreate();
+				}
+
+				nsc.Instance->OnUpdate(ts);
+			});
+		}
+
 		Camera* mainCamera = nullptr;
-		glm::mat4* cameraTransform;
+		glm::mat4* cameraTransform = nullptr;
 		{
 			auto view = m_registry.view<TransformComponent, CameraComponent>();
 			for (auto entity : view)
