@@ -21,33 +21,33 @@ namespace Volum
 		VLM_PROFILE_FUNCTION();
 
 		// Move inputs
-		if (Input::IsKeyPressed(VLM_KEY_A))
+		if (Input::IsKeyPressed(Key::A))
 		{
 			m_cameraPosition.x -= cos(glm::radians(m_cameraRotation.y)) * m_cameraTranslationSpeed * ts;
 			m_cameraPosition.z -= -sin(glm::radians(m_cameraRotation.y)) * m_cameraTranslationSpeed * ts;
 		}
-		else if (Input::IsKeyPressed(VLM_KEY_D))
+		else if (Input::IsKeyPressed(Key::D))
 		{
 			m_cameraPosition.x += cos(glm::radians(m_cameraRotation.y)) * m_cameraTranslationSpeed * ts;
 			m_cameraPosition.z += -sin(glm::radians(m_cameraRotation.y)) * m_cameraTranslationSpeed * ts;
 		}
 
-		if (Input::IsKeyPressed(VLM_KEY_W))
+		if (Input::IsKeyPressed(Key::W))
 		{
 			m_cameraPosition.x += -sin(glm::radians(m_cameraRotation.y)) * m_cameraTranslationSpeed * ts;
 			m_cameraPosition.z += -cos(glm::radians(m_cameraRotation.y)) * m_cameraTranslationSpeed * ts;
 		}
-		else if (Input::IsKeyPressed(VLM_KEY_S))
+		else if (Input::IsKeyPressed(Key::S))
 		{
 			m_cameraPosition.x -= -sin(glm::radians(m_cameraRotation.y)) * m_cameraTranslationSpeed * ts;
 			m_cameraPosition.z -= -cos(glm::radians(m_cameraRotation.y)) * m_cameraTranslationSpeed * ts;
 		}
 
-		if (Input::IsKeyPressed(VLM_KEY_E))
+		if (Input::IsKeyPressed(Key::E))
 		{
 			m_cameraPosition.y += m_cameraTranslationSpeed * ts;
 		}
-		else if (Input::IsKeyPressed(VLM_KEY_Q))
+		else if (Input::IsKeyPressed(Key::Q))
 		{
 			m_cameraPosition.y -= m_cameraTranslationSpeed * ts;
 		}
@@ -93,7 +93,7 @@ namespace Volum
 	{
 		VLM_PROFILE_FUNCTION();
 
-		if (e.GetMouseButton() == MouseCode::Button0)
+		if (e.GetMouseButton() == Mouse::Button0)
 		{
 			m_cursorMoveCameraEnabled = true;
 
@@ -107,7 +107,7 @@ namespace Volum
 	{
 		VLM_PROFILE_FUNCTION();
 
-		if (e.GetMouseButton() == MouseCode::Button0)
+		if (e.GetMouseButton() == Mouse::Button0)
 			m_cursorMoveCameraEnabled = false;
 
 		return false;
