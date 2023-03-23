@@ -49,6 +49,14 @@ namespace Volum
 
 		class CameraController : public ScriptableEntity
 		{
+		private:
+			bool NoPreviousPos = true;
+			float PreviousMousePosX = 0.0f;
+			float PreviousMousePosY = 0.0f;
+
+			glm::vec3 CamPosition = { 0.0f, 0.0f, 0.0f };
+			glm::vec3 CamRotation = { 0.0f, 0.0f, 0.0f };
+			float CamMovementSpeed = 3.0f, CamRotationSpeed = 0.1f;
 		public:
 			void OnCreate()
 			{
@@ -61,22 +69,74 @@ namespace Volum
 			void OnUpdate(TimeStep ts)
 			{
 				auto& transform = GetComponent<TransformComponent>().Transform;
-				float speed = 5.0f;
+
+				CamPosition = transform[3];
 
 				if (Input::IsKeyPressed(Key::W))
-					transform[3][2] -= speed * ts;
+				{
+					CamPosition.z -= cos(glm::radians(CamRotation.y)) * CamMovementSpeed * ts;
+					CamPosition.x -= sin(glm::radians(CamRotation.y)) * CamMovementSpeed * ts;
+				}
 				else if (Input::IsKeyPressed(Key::S))
-					transform[3][2] += speed * ts;
+				{
+					CamPosition.z += cos(glm::radians(CamRotation.y)) * CamMovementSpeed * ts;
+					CamPosition.x += sin(glm::radians(CamRotation.y)) * CamMovementSpeed * ts;
+				}
 
 				if (Input::IsKeyPressed(Key::D))
-					transform[3][0] += speed * ts;
+				{
+					CamPosition.x += cos(glm::radians(CamRotation.y)) * CamMovementSpeed * ts;
+					CamPosition.z += -sin(glm::radians(CamRotation.y)) * CamMovementSpeed * ts;
+				}
 				else if (Input::IsKeyPressed(Key::A))
-					transform[3][0] -= speed * ts;
+				{
+					CamPosition.x -= cos(glm::radians(CamRotation.y)) * CamMovementSpeed * ts;
+					CamPosition.z -= -sin(glm::radians(CamRotation.y)) * CamMovementSpeed * ts;
+				}
 
 				if (Input::IsKeyPressed(Key::E))
-					transform[3][1] += speed * ts;
+					CamPosition.y += CamMovementSpeed * ts;
 				else if (Input::IsKeyPressed(Key::Q))
-					transform[3][1] -= speed * ts;
+					CamPosition.y -= CamMovementSpeed * ts;
+
+				if (Input::IsMouseButtonPressed(Mouse::Button0))
+				{
+					auto mousePos = Input::GetMousePos();
+
+					if (NoPreviousPos)
+					{
+						PreviousMousePosX = mousePos.x;
+						PreviousMousePosY = mousePos.y;
+
+						NoPreviousPos = false;
+					}
+					else
+					{
+						CamRotation.y -= (mousePos.x - PreviousMousePosX) * CamRotationSpeed;
+						CamRotation.x -= (mousePos.y - PreviousMousePosY) * CamRotationSpeed;
+
+						// TODO: Fix cursor pos or disable it, so it does not go out of bounds
+
+						PreviousMousePosX = mousePos.x;
+						PreviousMousePosY = mousePos.y;
+
+						if (CamRotation.y > 180.0f)
+							CamRotation.y -= 360.0f;
+						else if (CamRotation.y <= -180.0f)
+							CamRotation.y += 360.0f;
+
+						CamRotation.x = glm::clamp(CamRotation.x, -90.0f, 90.0f);
+					}
+				}
+				else
+				{
+					NoPreviousPos = true;
+				}
+
+				transform = glm::translate(glm::mat4(1.0f), CamPosition)
+					* glm::rotate(glm::mat4(1.0f), glm::radians(CamRotation.y), glm::vec3(0.0f, 1.0f, 0.0f))  // y
+					* glm::rotate(glm::mat4(1.0f), glm::radians(CamRotation.x), glm::vec3(1.0f, 0.0f, 0.0f))  // x
+					* glm::rotate(glm::mat4(1.0f), glm::radians(CamRotation.z), glm::vec3(0.0f, 0.0f, 1.0f)); // z
 			}
 		};
 

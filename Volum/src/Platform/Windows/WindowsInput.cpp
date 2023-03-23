@@ -31,6 +31,6 @@ namespace Volum
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
 
-		return { (float)xpos, (float)xpos };
+		return { (float)xpos, (float)ypos };
 	}
 }
