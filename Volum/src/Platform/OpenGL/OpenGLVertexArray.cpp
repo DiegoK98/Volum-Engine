@@ -97,7 +97,7 @@ namespace Volum
 					{
 						glEnableVertexAttribArray(m_vertexBufferIndex);
 						glVertexAttribPointer(m_vertexBufferIndex, count, ShaderDataTypeToOGLBaseType(element.Type),
-							element.Normalized ? GL_TRUE : GL_FALSE, layout.GetStride(), (const void*)(sizeof(float) * count * i));
+							element.Normalized ? GL_TRUE : GL_FALSE, layout.GetStride(), (const void*)(element.Offset + sizeof(float) * count * i));
 						glVertexAttribDivisor(m_vertexBufferIndex, 1);
 						m_vertexBufferIndex++;
 					}
