@@ -1,6 +1,8 @@
+include "./vendor/premake/premake_customization/solution_items.lua"
+
 workspace "Volum"
     architecture "x86_64"
-    startproject "Sandbox"
+    startproject "Volum-Engine"
 
     configurations
     {
@@ -8,6 +10,11 @@ workspace "Volum"
         "Release",
         "Dist"
     }
+
+    solution_items
+	{
+		".editorconfig"
+	}
 
     flags
 	{
@@ -18,180 +25,23 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
-IncludeDir["GLFW"] = "Volum/vendor/GLFW/include"
-IncludeDir["Glad"] = "Volum/vendor/Glad/include"
-IncludeDir["ImGui"] = "Volum/vendor/ImGui"
-IncludeDir["glm"] = "Volum/vendor/glm"
-IncludeDir["stb_image"] = "Volum/vendor/stb_image"
-IncludeDir["entt"] = "Volum/vendor/entt/include"
+IncludeDir["GLFW"] = "%{wks.location}/Volum/vendor/GLFW/include"
+IncludeDir["Glad"] = "%{wks.location}/Volum/vendor/Glad/include"
+IncludeDir["ImGui"] = "%{wks.location}/Volum/vendor/ImGui"
+IncludeDir["glm"] = "%{wks.location}/Volum/vendor/glm"
+IncludeDir["stb_image"] = "%{wks.location}/Volum/vendor/stb_image"
+IncludeDir["entt"] = "%{wks.location}/Volum/vendor/entt/include"
 
 group "Dependencies"
+    include "vendor/premake"
     include "Volum/vendor/GLFW"
     include "Volum/vendor/Glad"
     include "Volum/vendor/ImGui"
 
 group ""
 
-
-project "Volum"
-    location "Volum"
-    kind "StaticLib"
-    language "C++"
-    cppdialect "C++20"
-    staticruntime "on"
-
-    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-    pchheader "vlmpch.h"
-    pchsource "Volum/src/vlmpch.cpp"
-
-    files
-    {
-        "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp",
-        "%{prj.name}/vendor/stb_image/**.h",
-        "%{prj.name}/vendor/stb_image/**.cpp",
-    }
-
-    defines
-    {
-        "_CRT_SECURE_NO_WARNINGS",
-        "GLFW_INCLUDE_NONE"
-    }
-
-    includedirs
-    {
-        "%{prj.name}/src",
-        "%{prj.name}/vendor/spdlog/include",
-        "%{IncludeDir.GLFW}",
-        "%{IncludeDir.Glad}",
-        "%{IncludeDir.ImGui}",
-        "%{IncludeDir.glm}",
-        "%{IncludeDir.stb_image}",
-        "%{IncludeDir.entt}"
-    }
-
-    links
-    {
-        "GLFW",
-        "Glad",
-        "ImGui",
-        "opengl32.lib"
-    }
-
-    filter "system:windows"
-        systemversion "latest"
-
-    filter "configurations:Debug"
-        defines "VLM_DEBUG"
-        runtime "Debug"
-        symbols "on"
-
-    filter "configurations:Release"
-        defines "VLM_RELEASE"
-        runtime "Release"
-        optimize "on"
-
-    filter "configurations:Dist"
-        defines "VLM_DIST"
-        runtime "Release"
-        optimize "on"
+include "Volum"
 
 group "Volum Apps"
-
-project "Volum-Editor"
-    location "Volum-Editor"
-    kind "ConsoleApp"
-    language "C++"
-    cppdialect "C++20"
-    staticruntime "on"
-
-    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-    files
-    {
-        "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
-    }
-
-    includedirs
-    {
-        "Volum/vendor/spdlog/include",
-        "Volum/src",
-        "Volum/vendor",
-        "%{IncludeDir.glm}",
-        "%{IncludeDir.entt}"
-    }
-
-    links
-    {
-        "Volum"
-    }
-
-    filter "system:windows"
-        systemversion "latest"
-
-    filter "configurations:Debug"
-        defines "VLM_DEBUG"
-        runtime "Debug"
-        symbols "on"
-
-    filter "configurations:Release"
-        defines "VLM_RELEASE"
-        runtime "Release"
-        optimize "on"
-
-    filter "configurations:Dist"
-        defines "VLM_DIST"
-        runtime "Release"
-        optimize "on"
-
-project "Sandbox"
-    location "Sandbox"
-    kind "ConsoleApp"
-    language "C++"
-    cppdialect "C++20"
-    staticruntime "on"
-
-    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-    files
-    {
-        "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
-    }
-
-    includedirs
-    {
-        "Volum/vendor/spdlog/include",
-        "Volum/src",
-        "Volum/vendor",
-        "%{IncludeDir.glm}",
-        "%{IncludeDir.entt}"
-    }
-
-    links
-    {
-        "Volum"
-    }
-
-    filter "system:windows"
-        systemversion "latest"
-
-    filter "configurations:Debug"
-        defines "VLM_DEBUG"
-        runtime "Debug"
-        symbols "on"
-
-    filter "configurations:Release"
-        defines "VLM_RELEASE"
-        runtime "Release"
-        optimize "on"
-
-    filter "configurations:Dist"
-        defines "VLM_DIST"
-        runtime "Release"
-        optimize "on"
+    include "Volum-Editor"
+    include "Sandbox"
