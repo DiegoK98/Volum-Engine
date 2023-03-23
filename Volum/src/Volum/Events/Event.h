@@ -1,8 +1,9 @@
 #pragma once
 
-#include "vlmpch.h"
-
 #include "Volum/Core/Base.h"
+#include "Volum/Debug/Instrumentor.h"
+
+#include <functional>
 
 namespace Volum {
 
