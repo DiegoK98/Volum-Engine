@@ -2,6 +2,8 @@
 
 #include <Volum.h>
 
+#include "Panels/SceneHierarchyPanel.h"
+
 namespace Volum
 {
 	class Editor3DLayer : public Layer
@@ -39,5 +41,8 @@ namespace Volum
 		const glm::vec4 m_cubeColor = { 0.6f, 0.1f, 0.8f, 0.5f };
 		glm::vec4 m_checkerboardTintColor = { 0.8f, 0.2f, 0.3f, 1.0f };
 		float m_tilingFactor = 1.0f;
+
+		// Panels
+		SceneHierarchyPanel m_sceneHierarchyPanel;
 	};
 }

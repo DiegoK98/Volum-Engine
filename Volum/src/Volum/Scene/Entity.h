@@ -43,6 +43,17 @@ namespace Volum
 		}
 
 		operator bool() const { return m_entityHandle ? true : false; }
+		operator uint32_t() const { return (uint32_t)m_entityHandle.entity(); }
+
+		bool operator==(const Entity& other) const
+		{
+			return m_entityHandle == other.m_entityHandle;
+		}
+
+		bool operator!=(const Entity& other) const
+		{
+			return m_entityHandle != other.m_entityHandle;
+		}
 
 	private:
 		entt::handle m_entityHandle;

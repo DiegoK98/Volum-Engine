@@ -144,6 +144,8 @@ namespace Volum
 
 		m_mainCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		m_secondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
+		m_sceneHierarchyPanel.SetContext(m_activeScene);
 	}
 
 	void Editor3DLayer::OnDetach()
@@ -233,6 +235,9 @@ namespace Volum
 
 			ImGui::EndMenuBar();
 		}
+
+		//Scene Hierarchy Panel
+		m_sceneHierarchyPanel.OnImGuiRender();
 
 		ImGui::Begin("Settings");
 

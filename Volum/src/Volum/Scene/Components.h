@@ -16,6 +16,16 @@ namespace Volum
 		CYLINDER = 3
 	};
 
+	struct TagComponent
+	{
+		std::string Tag;
+
+		TagComponent() = default;
+		TagComponent(const TagComponent&) = default;
+		TagComponent(const std::string& tag)
+			: Tag(tag) {}
+	};
+
 	struct TransformComponent
 	{
 		glm::mat4 Transform { 1.0f };
@@ -27,16 +37,6 @@ namespace Volum
 
 		operator glm::mat4& () { return Transform; }
 		operator const glm::mat4& () const { return Transform; }
-	};
-
-	struct TagComponent
-	{
-		std::string Tag;
-
-		TagComponent() = default;
-		TagComponent(const TagComponent&) = default;
-		TagComponent(const std::string& tag)
-			: Tag(tag) {}
 	};
 
 	struct CameraComponent
