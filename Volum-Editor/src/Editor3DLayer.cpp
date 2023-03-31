@@ -101,7 +101,7 @@ namespace Volum
 					CamPosition.y -= CamMovementSpeed * ts;
 
 				// Rotation
-				if (Input::IsMouseButtonPressed(Mouse::Button0))
+				if (Input::IsMouseButtonPressed(Mouse::Button0) && GetComponent<CameraComponent>().Camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
 				{
 					auto mousePos = Input::GetMousePos();
 

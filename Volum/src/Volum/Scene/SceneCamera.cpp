@@ -11,24 +11,24 @@ namespace Volum
 		RecalculateProjection();
 	}
 
-	void SceneCamera::SetOrthographic(float size, float nearClip, float farClip)
+	void SceneCamera::SetPerspective(float fovY, float nearClip, float farClip)
 	{
-		m_isPerspective = false;
+		m_projectionType = ProjectionType::Perspective;
 
-		m_orthographicSize = size;
-		m_orthographicNear = nearClip;
-		m_orthographicFar = farClip;
+		m_perspectiveFovY = glm::radians(fovY);
+		m_perspectiveNear = nearClip;
+		m_perspectiveFar = farClip;
 
 		RecalculateProjection();
 	}
 
-	void SceneCamera::SetPerspective(float fovY, float nearClip, float farClip)
+	void SceneCamera::SetOrthographic(float size, float nearClip, float farClip)
 	{
-		m_isPerspective = true;
+		m_projectionType = ProjectionType::Orthographic;
 
-		m_perspectiveFovY = fovY;
-		m_perspectiveNear = nearClip;
-		m_perspectiveFar = farClip;
+		m_orthographicSize = size;
+		m_orthographicNear = nearClip;
+		m_orthographicFar = farClip;
 
 		RecalculateProjection();
 	}
@@ -45,7 +45,11 @@ namespace Volum
 
 	void SceneCamera::RecalculateProjection()
 	{
-		if (!m_isPerspective)
+		if (m_projectionType == ProjectionType::Perspective)
+		{
+			m_projectionMatrix = glm::perspective(m_perspectiveFovY, m_aspectRatio, m_perspectiveNear, m_perspectiveFar);
+		}
+		else
 		{
 			float orthoLeft = -0.5f * m_aspectRatio * m_orthographicSize;
 			float orthoRight = 0.5f * m_aspectRatio * m_orthographicSize;
@@ -53,10 +57,6 @@ namespace Volum
 			float orthoTop = 0.5f * m_orthographicSize;
 
 			m_projectionMatrix = glm::ortho(orthoLeft, orthoRight, orthoBottom, orthoTop, m_orthographicNear, m_orthographicFar);
-		}
-		else
-		{
-			m_projectionMatrix = glm::perspective(m_perspectiveFovY, m_aspectRatio, m_perspectiveNear, m_perspectiveFar);
 		}
 	}
 }
