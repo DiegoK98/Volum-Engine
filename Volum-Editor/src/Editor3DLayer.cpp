@@ -7,7 +7,7 @@
 namespace Volum
 {
 	Editor3DLayer::Editor3DLayer()
-		: Layer("Editor 3D Layer"), m_cameraController(45.0f, 1280.0f / 720.0f)
+		: Layer("Editor 3D Layer")
 	{
 
 	}
@@ -69,9 +69,10 @@ namespace Volum
 			void OnUpdate(TimeStep ts)
 			{
 				auto& transform = GetComponent<TransformComponent>().Transform;
-
+				
 				CamPosition = transform[3];
 
+				// Movement
 				if (Input::IsKeyPressed(Key::W))
 				{
 					CamPosition.z -= cos(glm::radians(CamRotation.y)) * CamMovementSpeed * ts;
@@ -99,6 +100,7 @@ namespace Volum
 				else if (Input::IsKeyPressed(Key::Q))
 					CamPosition.y -= CamMovementSpeed * ts;
 
+				// Rotation
 				if (Input::IsMouseButtonPressed(Mouse::Button0))
 				{
 					auto mousePos = Input::GetMousePos();
@@ -159,13 +161,9 @@ namespace Volum
 			(spec.Width != m_viewportSize.x || spec.Height != m_viewportSize.y))
 		{
 			m_framebuffer->Resize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
-			m_cameraController.OnResize(m_viewportSize.x, m_viewportSize.y);
 
 			m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 		}
-
-		if (m_viewportFocused)
-			m_cameraController.OnUpdate(ts);
 		
 		// Draw preparation
 		Renderer3D::ResetStats();
@@ -284,12 +282,9 @@ namespace Volum
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 		ImGui::Begin("Scene View");
 
-		m_viewportFocused = ImGui::IsWindowFocused();
-		m_viewportHovered = ImGui::IsWindowHovered();
-		Application::Get().GetImGuiLayer()->BlockEvents(!m_viewportHovered); // Only let events through if hovering
-
-		if (!m_viewportHovered)
-			m_cameraController.SetCursorMoveCamera(false);
+		m_activeScene->m_viewportFocused = ImGui::IsWindowFocused();
+		m_activeScene->m_viewportHovered = ImGui::IsWindowHovered();
+		Application::Get().GetImGuiLayer()->BlockEvents(!m_activeScene->m_viewportHovered); // Only let events through if hovering
 
 		ImVec2 panelSize = ImGui::GetContentRegionAvail();
 		m_viewportSize = { panelSize.x, panelSize.y };
@@ -304,6 +299,6 @@ namespace Volum
 
 	void Editor3DLayer::OnEvent(Event& event)
 	{
-		m_cameraController.OnEvent(event);
+		
 	}
 }

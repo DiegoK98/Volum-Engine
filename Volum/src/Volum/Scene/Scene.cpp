@@ -44,7 +44,7 @@ namespace Volum
 					nsc.Instance->m_entity = Entity{ entity, this };
 					nsc.Instance->OnCreate();
 				}
-
+				//if (m_viewportFocused) // TODO: Instead of this, an Input System should handle wether an Input is handled or not
 				nsc.Instance->OnUpdate(ts);
 			});
 		}

@@ -18,8 +18,6 @@ namespace Volum
 		virtual void OnEvent(Event& event) override;
 
 	private:
-		Camera3DController m_cameraController;
-
 		// Temp
 		Ref<VertexArray> m_squareVA;
 		Ref<Shader> m_flatColorShader;
@@ -36,8 +34,6 @@ namespace Volum
 
 		bool m_secondCamera = false;
 
-		bool m_viewportFocused = false;
-		bool m_viewportHovered = false;
 		glm::vec2 m_viewportSize = { 0.0f, 0.0f };
 
 		const glm::vec4 m_cubeColor = { 0.6f, 0.1f, 0.8f, 0.5f };

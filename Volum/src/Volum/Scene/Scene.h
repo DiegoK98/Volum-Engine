@@ -19,6 +19,9 @@ namespace Volum
 
 		void OnUpdate(TimeStep ts);
 		void OnViewportResize(uint32_t width, uint32_t height);
+
+		bool m_viewportFocused = false;
+		bool m_viewportHovered = false;
 	private:
 		entt::registry m_registry;
 
