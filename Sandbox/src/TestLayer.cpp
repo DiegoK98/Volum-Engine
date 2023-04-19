@@ -141,6 +141,7 @@ void TestLayer::OnUpdate(Volum::TimeStep ts)
 	m_cameraController.OnUpdate(ts);
 
 	// Triangle moving inputs
+	// TODO: Remove deprecated macros
 	if (Volum::Input::IsKeyPressed(VLM_KEY_LEFT))
 		m_trianglePosition.x -= m_triangleMoveSpeed * ts;
 	else if (Volum::Input::IsKeyPressed(VLM_KEY_RIGHT))
